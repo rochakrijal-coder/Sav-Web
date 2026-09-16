@@ -63,11 +63,25 @@ function paint(p){
  keyLayer.setAttribute('opacity',key.toFixed(4));
  fillLayer.setAttribute('opacity',fill.toFixed(4));
  document.documentElement.style.setProperty('--ambient',(.035+exposure*.10).toFixed(4));
- const weights = [
-  1 - smooth(.20, .26, p),
-  smooth(.28, .34, p) * (1 - smooth(.60, .66, p)),
+ const enters = [
+  1,
+  smooth(.28, .34, p),
   smooth(.68, .74, p)
- ];
+];
+
+const exits = [
+  smooth(.20, .26, p),
+  smooth(.60, .66, p),
+  0
+];
+
+frames.forEach((el, i) => {
+  const y = -24 * (1 - enters[i]) + 24 * exits[i];
+
+  el.style.opacity = weights[i];
+  el.style.transform = `translateY(${y}px)`;
+  el.style.visibility = weights[i] > 0 ? 'visible' : 'hidden';
+ });
  frames.forEach((el,i)=>{el.style.opacity=weights[i];el.style.transform='translateY('+((1-weights[i])*10)+'px)';});
  for(const [id,value] of [['key',key],['fill',fill]]){
   document.querySelector('#'+id+'-value').textContent=Math.round(value*100)+'%';
