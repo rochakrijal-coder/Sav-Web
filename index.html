@@ -10,7 +10,7 @@
     content="Savitara Moon I. An interactive study of light, form and atmosphere."
   >
 
-  <link rel="stylesheet" href="./style.css?v=olive-depth-5">
+  <link rel="stylesheet" href="./style.css?v=headline-scroll-6">
 
   <style>
     /* Keep the headline area stable as phrases move through it. */
@@ -410,23 +410,32 @@
           ? 'STILL LIGHT STUDY · REDUCED MOTION'
           : 'SCROLL TO SHAPE THE LIGHT · IN EITHER DIRECTION';
 
-        request();
+        render();
       }
 
-      addEventListener('scroll', request, { passive: true });
+      // Capture scroll events from the document and nested preview containers.
+      document.addEventListener('scroll', request, { passive: true, capture: true });
+      window.addEventListener('scroll', request, { passive: true });
+      window.addEventListener('pageshow', mode);
+      window.addEventListener('load', mode);
 
       addEventListener('resize', () => {
         last = -1;
         request();
       });
 
-      reduced.addEventListener('change', mode);
+      // Paint immediately; optional media-query listeners must not block startup.
+      mode();
+      if (typeof reduced.addEventListener === 'function') {
+        reduced.addEventListener('change', mode);
+      } else if (typeof reduced.addListener === 'function') {
+        reduced.addListener(mode);
+      }
 
       document.querySelector('.replay').addEventListener('click', () => {
         scrollTo({ top: 0, behavior: 'instant' });
       });
 
-      mode();
     })();
   </script>
 </body>
