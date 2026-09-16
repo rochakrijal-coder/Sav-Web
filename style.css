@@ -1,0 +1,176 @@
+/* --- RESET & BASICS --- */
+:root {
+    --bg-color: #fdfcfb; /* Warm, paper-like white */
+    --text-main: #1d1d1f; /* Apple-style black */
+    --text-light: #86868b;
+    --accent-nature: #344e41; /* Deep fern green */
+    --accent-soft: #a3b18a; /* Sage */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+/* --- TYPOGRAPHY --- */
+h1, h2, h3 { font-weight: 600; letter-spacing: -0.02em; }
+p { font-size: 1.1rem; color: var(--text-light); max-width: 600px; margin: 0 auto; }
+
+/* --- NAVIGATION --- */
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(253, 252, 251, 0.8);
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+}
+.nav-logo { font-size: 1.2rem; font-weight: 700; color: var(--accent-nature); letter-spacing: -0.05em; }
+.nav-links a { text-decoration: none; color: var(--text-main); margin-left: 30px; font-size: 0.9rem; transition: 0.3s; }
+.nav-links a:hover { color: var(--accent-nature); }
+
+/* --- HERO SECTION --- */
+header.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+    background: radial-gradient(circle at 50% 50%, #ffffff 0%, #e8edec 100%);
+    position: relative;
+}
+
+.hero h1 {
+    font-size: 5rem;
+    margin-bottom: 10px;
+    background: -webkit-linear-gradient(45deg, #1d1d1f, #344e41);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    animation: fadeIn 1.5s ease-out forwards;
+}
+
+.hero h2 {
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--text-main);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeIn 1.5s ease-out 0.3s forwards;
+}
+
+.hero-cta {
+    margin-top: 30px;
+    padding: 12px 28px;
+    background: var(--accent-nature);
+    color: white;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 500;
+    opacity: 0;
+    animation: slideUp 1s ease-out 0.8s forwards;
+    transition: transform 0.2s;
+}
+.hero-cta:hover { transform: scale(1.05); }
+
+/* --- PRODUCT SHOWCASE --- */
+.showcase {
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.product-video {
+    width: 100%;
+    max-width: 800px;       /* Keeps it from getting too huge */
+    border-radius: 20px;    /* Matches your Apple-like design */
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    margin: 50px auto;      /* Centers it */
+    display: block;         /* Fixes alignment issues */
+    object-fit: cover;      /* Ensures it fills the box nicely */
+}
+
+/* Abstract Nature Shape in background */
+.leaf-shape {
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(163, 177, 138, 0.2) 0%, rgba(255,255,255,0) 70%);
+    z-index: -1;
+    border-radius: 50%;
+    filter: blur(50px);
+}
+
+/* --- GRID FEATURES --- */
+.grid-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px 20px;
+}
+
+.card {
+    background: white;
+    padding: 50px;
+    border-radius: 30px;
+    text-align: left;
+    transition: transform 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+}
+.card:hover { transform: translateY(-5px); }
+.card h3 { font-size: 1.8rem; margin-bottom: 15px; color: var(--text-main); }
+.card p { margin: 0; font-size: 1rem; color: var(--text-light); max-width: 100%; }
+
+.card.dark {
+    background: var(--text-main);
+    color: white;
+}
+.card.dark h3 { color: white; }
+.card.dark p { color: #86868b; }
+
+.card.nature-bg {
+    background-color: #e8edec;
+}
+
+/* --- TECHNICAL / NATURE BLEND --- */
+.tech-nature {
+    padding: 150px 20px;
+    text-align: center;
+    background: #fafafc;
+}
+.tech-nature h2 { font-size: 3.5rem; margin-bottom: 20px; }
+.tech-nature span { color: var(--accent-nature); }
+
+/* --- FOOTER --- */
+footer {
+    background: #f5f5f7;
+    padding: 80px 20px 40px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+.footer-links a { color: var(--text-light); text-decoration: none; margin: 0 10px; }
+
+/* --- ANIMATIONS --- */
+@keyframes fadeIn { from { opacity: 0; filter: blur(10px); } to { opacity: 1; filter: blur(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Mobile Tweaks */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 3rem; }
+    .grid-section { grid-template-columns: 1fr; }
+}
