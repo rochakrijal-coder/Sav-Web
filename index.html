@@ -1,110 +1,433 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Savitara — Light, considered.</title>
-<meta name="description" content="Savitara Moon I. An interactive study of light, form and atmosphere.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b120f'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%23e7e1ce'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./style.css?v=olive-depth-5"></head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Savitara — Light, considered.</title>
+  <meta
+    name="description"
+    content="Savitara Moon I. An interactive study of light, form and atmosphere."
+  >
+
+  <link rel="stylesheet" href="./style.css?v=olive-depth-5">
+
+  <style>
+    /* Keep the headline area stable as phrases move through it. */
+    .copy h1 {
+      display: grid;
+      min-height: 2em;
+    }
+
+    .headline-frame {
+      grid-area: 1 / 1;
+      opacity: 0;
+      visibility: hidden;
+      will-change: opacity, transform;
+      transition: none;
+    }
+
+    .headline-frame:first-child {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .headline-frame {
+        will-change: auto;
+      }
+    }
+  </style>
+</head>
+
 <body>
-<header><a class="brand" href="#top" aria-label="Savitara home">SAVITARA</a><a class="nav" href="#moon">Discover Moon I</a></header>
-<main id="top"><section class="journey" aria-label="Interactive studio lighting study"><div class="stage">
-<div class="ambient" aria-hidden="true"></div><svg class="sphere" viewBox="0 0 1000 1000" role="img" aria-label="Smooth material sphere with two studio lights rising together" xmlns="http://www.w3.org/2000/svg">
-<defs>
- <!-- Coordinates are in sphere space, not the oversized layer rectangle. -->
- <radialGradient id="sphere-base" gradientUnits="userSpaceOnUse" cx="615" cy="325" r="590">
-  <stop stop-color="#6b7050"/><stop offset=".38" stop-color="#444b32"/><stop offset=".72" stop-color="#242b19"/><stop offset="1" stop-color="#11160d"/>
- </radialGradient>
- <radialGradient id="sphere-key" gradientUnits="userSpaceOnUse" cx="653" cy="295" r="635">
-  <stop stop-color="#f1e8c9"/><stop offset=".15" stop-color="#d9d1ad"/><stop offset=".37" stop-color="#a6a582"/><stop offset=".60" stop-color="#60684a"/><stop offset=".82" stop-color="#2c3521"/><stop offset="1" stop-color="#151d11"/>
- </radialGradient>
- <radialGradient id="sphere-fill" gradientUnits="userSpaceOnUse" cx="235" cy="505" r="405">
-  <stop stop-color="#c5cca4" stop-opacity=".48"/><stop offset=".35" stop-color="#a2b180" stop-opacity=".24"/><stop offset=".8" stop-color="#87966b" stop-opacity=".035"/><stop offset="1" stop-color="#87966b" stop-opacity="0"/>
- </radialGradient>
- <radialGradient id="sphere-shape" gradientUnits="userSpaceOnUse" cx="500" cy="500" r="355">
-  <stop offset=".42" stop-color="#0e1509" stop-opacity="0"/><stop offset=".73" stop-color="#0e1509" stop-opacity=".04"/><stop offset=".9" stop-color="#0e1509" stop-opacity=".18"/><stop offset="1" stop-color="#0e1509" stop-opacity=".4"/>
- </radialGradient>
- <radialGradient id="sphere-bounce" gradientUnits="userSpaceOnUse" cx="290" cy="700" r="220">
-  <stop stop-color="#a5ae78" stop-opacity=".13"/><stop offset="1" stop-color="#a5ae78" stop-opacity="0"/>
- </radialGradient>
- <radialGradient id="ground-shadow">
-  <stop stop-color="#080c05" stop-opacity=".64"/><stop offset=".5" stop-color="#080c05" stop-opacity=".26"/><stop offset="1" stop-color="#080c05" stop-opacity="0"/>
- </radialGradient>
- <clipPath id="sphere-boundary"><circle cx="500" cy="500" r="355"/></clipPath>
-</defs>
-<ellipse cx="463" cy="868" rx="300" ry="48" fill="url(#ground-shadow)" opacity=".72"/>
-<g clip-path="url(#sphere-boundary)">
- <path fill="url(#sphere-base)" d="M0 0h1000v1000H0z"/>
- <path id="sphere-key-layer" opacity=".06" fill="url(#sphere-key)" d="M0 0h1000v1000H0z"/>
- <path id="sphere-fill-layer" opacity=".025" fill="url(#sphere-fill)" d="M0 0h1000v1000H0z"/>
- <path fill="url(#sphere-shape)" d="M0 0h1000v1000H0z"/>
- <path fill="url(#sphere-bounce)" d="M0 0h1000v1000H0z"/>
-</g>
-</svg>
-<div class="study-note">LIGHT STUDY / 001 · CONCEPT GEOMETRY</div>
-<div class="copy"><p class="eyebrow">Savitara · Moon I</p><h1 aria-label="Light, considered. Design, refined. Balance, achieved."><span class="headline-frame" aria-hidden="true">Light,<br>considered.</span><span class="headline-frame" aria-hidden="true">Design,<br>refined.</span><span class="headline-frame" aria-hidden="true">Balance,<br>achieved.</span></h1><p class="description">A little light changes everything.<br>The shape. The texture. The feeling.</p><div class="chapter"><span id="number">01 / 03</span><span id="caption">Light takes shape.</span></div></div>
-<div class="bottom"><div class="scroll" id="hint">SCROLL TO SHAPE THE LIGHT<br>Slowly. In either direction.</div><div class="meters" aria-hidden="true"><div class="meter"><label>KEY <span id="key-value">0%</span></label><div class="track"><i id="key-bar"></i></div></div><div class="meter"><label>FILL <span id="fill-value">0%</span></label><div class="track"><i id="fill-bar"></i></div></div></div></div><div class="progress" aria-hidden="true"></div>
-</div></section>
-<section class="end" id="moon"><div><p class="eyebrow">Moon I · By Savitara</p><h2>Precision you see.<br>Calm you feel.</h2></div><div><p>Light gives a surface its character. A deliberate highlight. A shadow with depth. Just enough softness to bring the scene together.</p><p>Moon I is a studio light shaped around that intention.</p><button class="replay">Replay the light study ↑</button></div></section>
-</main><footer class="footer"><span>© 2026 Savitara</span><span>Design prototype · Material study, not a Moon I product render</span></footer>
-<script>
-(()=>{
-'use strict';
-const journey=document.querySelector('.journey'),stage=document.querySelector('.stage'),sphere=document.querySelector('.sphere');
-const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-const keyLayer=document.querySelector('#sphere-key-layer'),fillLayer=document.querySelector('#sphere-fill-layer');
-const frames=[...document.querySelectorAll('.headline-frame')];
-const clamp=v=>Math.max(0,Math.min(1,v));
-const smooth=(a,b,v)=>{const t=clamp((v-a)/(b-a));return t*t*(3-2*t);};
-let queued=false,last=-1;
-function paint(p){
- // Both lights share one ramp, with a lower fill intensity to preserve depth.
- const exposure=smooth(0,1,p),key=.06+.94*exposure,fill=.025+.575*exposure;
- keyLayer.setAttribute('opacity',key.toFixed(4));
- fillLayer.setAttribute('opacity',fill.toFixed(4));
- document.documentElement.style.setProperty('--ambient',(.035+exposure*.10).toFixed(4));
- const enters = [
-  1,
-  smooth(.28, .34, p),
-  smooth(.68, .74, p)
-];
+  <header>
+    <a class="brand" href="#top" aria-label="Savitara home">
+      SAVITARA
+    </a>
+    <a class="nav" href="#moon">Discover Moon I</a>
+  </header>
 
-const exits = [
-  smooth(.20, .26, p),
-  smooth(.60, .66, p),
-  0
-];
+  <main id="top">
+    <section
+      class="journey"
+      aria-label="Interactive studio lighting study"
+    >
+      <div class="stage">
+        <div class="ambient" aria-hidden="true"></div>
 
-frames.forEach((el, i) => {
-  const y = -24 * (1 - enters[i]) + 24 * exits[i];
+        <svg
+          class="sphere"
+          viewBox="0 0 1000 1000"
+          role="img"
+          aria-label="Smooth material sphere with two studio lights rising together"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <radialGradient
+              id="sphere-base"
+              gradientUnits="userSpaceOnUse"
+              cx="615" cy="325" r="590"
+            >
+              <stop stop-color="#6b7050"/>
+              <stop offset=".38" stop-color="#444b32"/>
+              <stop offset=".72" stop-color="#242b19"/>
+              <stop offset="1" stop-color="#11160d"/>
+            </radialGradient>
 
-  el.style.opacity = weights[i];
-  el.style.transform = `translateY(${y}px)`;
-  el.style.visibility = weights[i] > 0 ? 'visible' : 'hidden';
- });
- frames.forEach((el,i)=>{el.style.opacity=weights[i];el.style.transform='translateY('+((1-weights[i])*10)+'px)';});
- for(const [id,value] of [['key',key],['fill',fill]]){
-  document.querySelector('#'+id+'-value').textContent=Math.round(value*100)+'%';
-  document.querySelector('#'+id+'-bar').style.width=value*100+'%';
- }
- document.querySelector('.progress').style.width=p*100+'%';
- const phase=p<.27?0:p<.67?1:2;
- document.querySelector('#number').textContent=['01 / 03','02 / 03','03 / 03'][phase];
- document.querySelector('#caption').textContent=['Light takes shape.','Two lights. One composition.','The balance of two.'][phase];
- sphere.dataset.progress=p.toFixed(4);sphere.dataset.key=key.toFixed(4);sphere.dataset.fill=fill.toFixed(4);
-}
-function render(){
- queued=false;
- const travel=Math.max(1,journey.offsetHeight-stage.offsetHeight);
- const p=reduced.matches?1:clamp(-journey.getBoundingClientRect().top/travel);
- if(Math.abs(last-p)>.0001){paint(p);last=p;}
-}
-function request(){if(!queued){queued=true;requestAnimationFrame(render);}}
-function mode(){last=-1;document.querySelector('#hint').textContent=reduced.matches?'STILL LIGHT STUDY · REDUCED MOTION':'SCROLL TO SHAPE THE LIGHT · IN EITHER DIRECTION';request();}
-addEventListener('scroll',request,{passive:true});addEventListener('resize',()=>{last=-1;request();});
-reduced.addEventListener('change',mode);
-document.querySelector('.replay').addEventListener('click',()=>scrollTo({top:0,behavior:'instant'}));
-mode();
-})();
-</script></body></html>
+            <radialGradient
+              id="sphere-key"
+              gradientUnits="userSpaceOnUse"
+              cx="653" cy="295" r="635"
+            >
+              <stop stop-color="#f1e8c9"/>
+              <stop offset=".15" stop-color="#d9d1ad"/>
+              <stop offset=".37" stop-color="#a6a582"/>
+              <stop offset=".60" stop-color="#60684a"/>
+              <stop offset=".82" stop-color="#2c3521"/>
+              <stop offset="1" stop-color="#151d11"/>
+            </radialGradient>
 
+            <radialGradient
+              id="sphere-fill"
+              gradientUnits="userSpaceOnUse"
+              cx="235" cy="505" r="405"
+            >
+              <stop stop-color="#c5cca4" stop-opacity=".48"/>
+              <stop
+                offset=".35"
+                stop-color="#a2b180"
+                stop-opacity=".24"
+              />
+              <stop
+                offset=".8"
+                stop-color="#87966b"
+                stop-opacity=".035"
+              />
+              <stop
+                offset="1"
+                stop-color="#87966b"
+                stop-opacity="0"
+              />
+            </radialGradient>
+
+            <radialGradient
+              id="sphere-shape"
+              gradientUnits="userSpaceOnUse"
+              cx="500" cy="500" r="355"
+            >
+              <stop
+                offset=".42"
+                stop-color="#0e1509"
+                stop-opacity="0"
+              />
+              <stop
+                offset=".73"
+                stop-color="#0e1509"
+                stop-opacity=".04"
+              />
+              <stop
+                offset=".9"
+                stop-color="#0e1509"
+                stop-opacity=".18"
+              />
+              <stop
+                offset="1"
+                stop-color="#0e1509"
+                stop-opacity=".4"
+              />
+            </radialGradient>
+
+            <radialGradient
+              id="sphere-bounce"
+              gradientUnits="userSpaceOnUse"
+              cx="290" cy="700" r="220"
+            >
+              <stop stop-color="#a5ae78" stop-opacity=".13"/>
+              <stop
+                offset="1"
+                stop-color="#a5ae78"
+                stop-opacity="0"
+              />
+            </radialGradient>
+
+            <radialGradient id="ground-shadow">
+              <stop stop-color="#080c05" stop-opacity=".64"/>
+              <stop
+                offset=".5"
+                stop-color="#080c05"
+                stop-opacity=".26"
+              />
+              <stop
+                offset="1"
+                stop-color="#080c05"
+                stop-opacity="0"
+              />
+            </radialGradient>
+
+            <clipPath id="sphere-boundary">
+              <circle cx="500" cy="500" r="355"/>
+            </clipPath>
+          </defs>
+
+          <ellipse
+            cx="463" cy="868"
+            rx="300" ry="48"
+            fill="url(#ground-shadow)"
+            opacity=".72"
+          />
+
+          <g clip-path="url(#sphere-boundary)">
+            <path
+              fill="url(#sphere-base)"
+              d="M0 0h1000v1000H0z"
+            />
+            <path
+              id="sphere-key-layer"
+              opacity=".06"
+              fill="url(#sphere-key)"
+              d="M0 0h1000v1000H0z"
+            />
+            <path
+              id="sphere-fill-layer"
+              opacity=".025"
+              fill="url(#sphere-fill)"
+              d="M0 0h1000v1000H0z"
+            />
+            <path
+              fill="url(#sphere-shape)"
+              d="M0 0h1000v1000H0z"
+            />
+            <path
+              fill="url(#sphere-bounce)"
+              d="M0 0h1000v1000H0z"
+            />
+          </g>
+        </svg>
+
+        <div class="study-note">
+          LIGHT STUDY / 001 · CONCEPT GEOMETRY
+        </div>
+
+        <div class="copy">
+          <p class="eyebrow">Savitara · Moon I</p>
+
+          <h1 aria-label="Light, considered. Design, refined. Balance, achieved.">
+            <span class="headline-frame" aria-hidden="true">
+              Light,<br>considered.
+            </span>
+            <span class="headline-frame" aria-hidden="true">
+              Design,<br>refined.
+            </span>
+            <span class="headline-frame" aria-hidden="true">
+              Balance,<br>achieved.
+            </span>
+          </h1>
+
+          <p class="description">
+            A little light changes everything.<br>
+            The shape. The texture. The feeling.
+          </p>
+
+          <div class="chapter">
+            <span id="number">01 / 03</span>
+            <span id="caption">Light takes shape.</span>
+          </div>
+        </div>
+
+        <div class="bottom">
+          <div class="scroll" id="hint">
+            SCROLL TO SHAPE THE LIGHT<br>
+            Slowly. In either direction.
+          </div>
+
+          <div class="meters" aria-hidden="true">
+            <div class="meter">
+              <label>KEY <span id="key-value">0%</span></label>
+              <div class="track"><i id="key-bar"></i></div>
+            </div>
+
+            <div class="meter">
+              <label>FILL <span id="fill-value">0%</span></label>
+              <div class="track"><i id="fill-bar"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="progress" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="end" id="moon">
+      <div>
+        <p class="eyebrow">Moon I · By Savitara</p>
+        <h2>Precision you see.<br>Calm you feel.</h2>
+      </div>
+
+      <div>
+        <p>
+          Light gives a surface its character. A deliberate highlight.
+          A shadow with depth. Just enough softness to bring the
+          scene together.
+        </p>
+        <p>Moon I is a studio light shaped around that intention.</p>
+        <button class="replay" type="button">
+          Replay the light study ↑
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© 2026 Savitara</span>
+    <span>
+      Design prototype · Material study, not a Moon I product render
+    </span>
+  </footer>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const journey = document.querySelector('.journey');
+      const stage = document.querySelector('.stage');
+      const sphere = document.querySelector('.sphere');
+
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+
+      const keyLayer = document.querySelector('#sphere-key-layer');
+      const fillLayer = document.querySelector('#sphere-fill-layer');
+      const frames = [...document.querySelectorAll('.headline-frame')];
+
+      const clamp = value => Math.max(0, Math.min(1, value));
+
+      const smooth = (start, end, value) => {
+        const t = clamp((value - start) / (end - start));
+        return t * t * (3 - 2 * t);
+      };
+
+      let queued = false;
+      let last = -1;
+
+      function paint(p) {
+        // Both lights rise together. The fill stays softer.
+        const exposure = smooth(0, 1, p);
+        const key = .06 + .94 * exposure;
+        const fill = .025 + .575 * exposure;
+
+        keyLayer.setAttribute('opacity', key.toFixed(4));
+        fillLayer.setAttribute('opacity', fill.toFixed(4));
+
+        document.documentElement.style.setProperty(
+          '--ambient',
+          (.035 + exposure * .10).toFixed(4)
+        );
+
+        // Finish each exit before starting the next entrance.
+        const enters = [
+          1,
+          smooth(.28, .34, p),
+          smooth(.68, .74, p)
+        ];
+
+        const exits = [
+          smooth(.20, .26, p),
+          smooth(.60, .66, p),
+          0
+        ];
+
+        frames.forEach((el, i) => {
+          const opacity = enters[i] * (1 - exits[i]);
+
+          // Enter from above; leave downward.
+          const y = reduced.matches
+            ? 0
+            : -24 * (1 - enters[i]) + 24 * exits[i];
+
+          el.style.opacity = opacity;
+          el.style.transform = `translateY(${y}px)`;
+          el.style.visibility = opacity > 0 ? 'visible' : 'hidden';
+        });
+
+        for (const [id, value] of [['key', key], ['fill', fill]]) {
+          document.querySelector('#' + id + '-value').textContent =
+            Math.round(value * 100) + '%';
+
+          document.querySelector('#' + id + '-bar').style.width =
+            value * 100 + '%';
+        }
+
+        document.querySelector('.progress').style.width = p * 100 + '%';
+
+        const phase = p < .27 ? 0 : p < .67 ? 1 : 2;
+
+        document.querySelector('#number').textContent = [
+          '01 / 03',
+          '02 / 03',
+          '03 / 03'
+        ][phase];
+
+        document.querySelector('#caption').textContent = [
+          'Light takes shape.',
+          'Two lights. One composition.',
+          'The balance of two.'
+        ][phase];
+
+        sphere.dataset.progress = p.toFixed(4);
+        sphere.dataset.key = key.toFixed(4);
+        sphere.dataset.fill = fill.toFixed(4);
+      }
+
+      function render() {
+        queued = false;
+
+        const travel = Math.max(
+          1,
+          journey.offsetHeight - stage.offsetHeight
+        );
+
+        const p = reduced.matches
+          ? 1
+          : clamp(-journey.getBoundingClientRect().top / travel);
+
+        if (Math.abs(last - p) > .0001) {
+          paint(p);
+          last = p;
+        }
+      }
+
+      function request() {
+        if (!queued) {
+          queued = true;
+          requestAnimationFrame(render);
+        }
+      }
+
+      function mode() {
+        last = -1;
+
+        document.querySelector('#hint').textContent = reduced.matches
+          ? 'STILL LIGHT STUDY · REDUCED MOTION'
+          : 'SCROLL TO SHAPE THE LIGHT · IN EITHER DIRECTION';
+
+        request();
+      }
+
+      addEventListener('scroll', request, { passive: true });
+
+      addEventListener('resize', () => {
+        last = -1;
+        request();
+      });
+
+      reduced.addEventListener('change', mode);
+
+      document.querySelector('.replay').addEventListener('click', () => {
+        scrollTo({ top: 0, behavior: 'instant' });
+      });
+
+      mode();
+    })();
+  </script>
+</body>
+</html>
