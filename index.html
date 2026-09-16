@@ -5,23 +5,40 @@
 <title>Savitara — Light, considered.</title>
 <meta name="description" content="Savitara Moon I. An interactive study of light, form and atmosphere.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b120f'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%23e7e1ce'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./style.css?v=olive-study-4"></head>
+<link rel="stylesheet" href="./style.css?v=olive-depth-5"></head>
 <body>
 <header><a class="brand" href="#top" aria-label="Savitara home">SAVITARA</a><a class="nav" href="#moon">Discover Moon I</a></header>
 <main id="top"><section class="journey" aria-label="Interactive studio lighting study"><div class="stage">
 <div class="ambient" aria-hidden="true"></div><svg class="sphere" viewBox="0 0 1000 1000" role="img" aria-label="Smooth material sphere with two studio lights rising together" xmlns="http://www.w3.org/2000/svg">
 <defs>
- <radialGradient id="sphere-base" cx="63%" cy="30%" r="78%"><stop stop-color="#5e6042"/><stop offset=".55" stop-color="#3f442a"/><stop offset="1" stop-color="#262d1a"/></radialGradient>
- <radialGradient id="sphere-key" cx="76%" cy="22%" r="91%"><stop stop-color="#faf0cb"/><stop offset=".28" stop-color="#dacf9c"/><stop offset=".65" stop-color="#969165"/><stop offset="1" stop-color="#4a5030"/></radialGradient>
- <radialGradient id="sphere-fill" cx="12%" cy="57%" r="83%"><stop stop-color="#e1dfb3" stop-opacity=".8"/><stop offset=".45" stop-color="#acb184" stop-opacity=".4"/><stop offset="1" stop-color="#a3a77a" stop-opacity="0"/></radialGradient>
- <radialGradient id="sphere-shape" cx="50%" cy="42%" r="60%"><stop offset=".5" stop-color="#0e1409" stop-opacity="0"/><stop offset="1" stop-color="#0e1409" stop-opacity=".4"/></radialGradient>
+ <!-- Coordinates are in sphere space, not the oversized layer rectangle. -->
+ <radialGradient id="sphere-base" gradientUnits="userSpaceOnUse" cx="615" cy="325" r="590">
+  <stop stop-color="#6b7050"/><stop offset=".38" stop-color="#444b32"/><stop offset=".72" stop-color="#242b19"/><stop offset="1" stop-color="#11160d"/>
+ </radialGradient>
+ <radialGradient id="sphere-key" gradientUnits="userSpaceOnUse" cx="653" cy="295" r="635">
+  <stop stop-color="#f1e8c9"/><stop offset=".15" stop-color="#d9d1ad"/><stop offset=".37" stop-color="#a6a582"/><stop offset=".60" stop-color="#60684a"/><stop offset=".82" stop-color="#2c3521"/><stop offset="1" stop-color="#151d11"/>
+ </radialGradient>
+ <radialGradient id="sphere-fill" gradientUnits="userSpaceOnUse" cx="235" cy="505" r="405">
+  <stop stop-color="#c5cca4" stop-opacity=".48"/><stop offset=".35" stop-color="#a2b180" stop-opacity=".24"/><stop offset=".8" stop-color="#87966b" stop-opacity=".035"/><stop offset="1" stop-color="#87966b" stop-opacity="0"/>
+ </radialGradient>
+ <radialGradient id="sphere-shape" gradientUnits="userSpaceOnUse" cx="500" cy="500" r="355">
+  <stop offset=".42" stop-color="#0e1509" stop-opacity="0"/><stop offset=".73" stop-color="#0e1509" stop-opacity=".04"/><stop offset=".9" stop-color="#0e1509" stop-opacity=".18"/><stop offset="1" stop-color="#0e1509" stop-opacity=".4"/>
+ </radialGradient>
+ <radialGradient id="sphere-bounce" gradientUnits="userSpaceOnUse" cx="290" cy="700" r="220">
+  <stop stop-color="#a5ae78" stop-opacity=".13"/><stop offset="1" stop-color="#a5ae78" stop-opacity="0"/>
+ </radialGradient>
+ <radialGradient id="ground-shadow">
+  <stop stop-color="#080c05" stop-opacity=".64"/><stop offset=".5" stop-color="#080c05" stop-opacity=".26"/><stop offset="1" stop-color="#080c05" stop-opacity="0"/>
+ </radialGradient>
  <clipPath id="sphere-boundary"><circle cx="500" cy="500" r="355"/></clipPath>
 </defs>
+<ellipse cx="463" cy="868" rx="300" ry="48" fill="url(#ground-shadow)" opacity=".72"/>
 <g clip-path="url(#sphere-boundary)">
  <path fill="url(#sphere-base)" d="M0 0h1000v1000H0z"/>
  <path id="sphere-key-layer" opacity=".06" fill="url(#sphere-key)" d="M0 0h1000v1000H0z"/>
  <path id="sphere-fill-layer" opacity=".025" fill="url(#sphere-fill)" d="M0 0h1000v1000H0z"/>
  <path fill="url(#sphere-shape)" d="M0 0h1000v1000H0z"/>
+ <path fill="url(#sphere-bounce)" d="M0 0h1000v1000H0z"/>
 </g>
 </svg>
 <div class="study-note">LIGHT STUDY / 001 · CONCEPT GEOMETRY</div>
@@ -45,7 +62,7 @@ function paint(p){
  const exposure=smooth(0,1,p),key=.06+.94*exposure,fill=.025+.575*exposure;
  keyLayer.setAttribute('opacity',key.toFixed(4));
  fillLayer.setAttribute('opacity',fill.toFixed(4));
- document.documentElement.style.setProperty('--ambient',(.08+exposure*.24).toFixed(4));
+ document.documentElement.style.setProperty('--ambient',(.035+exposure*.10).toFixed(4));
  const t1=smooth(.2,.34,p),t2=smooth(.6,.74,p),weights=[1-t1,t1*(1-t2),t2];
  frames.forEach((el,i)=>{el.style.opacity=weights[i];el.style.transform='translateY('+((1-weights[i])*10)+'px)';});
  for(const [id,value] of [['key',key],['fill',fill]]){
