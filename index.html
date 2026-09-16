@@ -3,31 +3,52 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Savitara — Light, considered.</title>
-<meta name="description" content="Savitara Moon 1. An interactive study of light, form and atmosphere.">
+<meta name="description" content="Savitara Moon I. An interactive study of light, form and atmosphere.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b120f'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%23e7e1ce'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./style.css?v=light-study-2"></head>
+<link rel="stylesheet" href="./style.css?v=light-study-3"></head>
 <body>
-<header><a class="brand" href="#top" aria-label="Savitara home">SAVITARA</a><a class="nav" href="#moon">Discover Moon 1</a></header>
+<header><a class="brand" href="#top" aria-label="Savitara home">SAVITARA</a><a class="nav" href="#moon">Discover Moon I</a></header>
 <main id="top"><section class="journey" aria-label="Interactive studio lighting study"><div class="stage">
 <div class="ambient" aria-hidden="true"></div><canvas width="540" height="540" aria-label="Material study illuminated by a key light from the upper right and a secondary fill light"></canvas>
 <div class="study-note">LIGHT STUDY / 001 · CONCEPT GEOMETRY</div>
-<div class="copy"><p class="eyebrow">Savitara · Moon 1</p><h1>Light,<br>considered.</h1><p class="description">A little light changes everything.<br>The shape. The texture. The feeling.</p><div class="chapter"><span id="number">01 / 03</span><span id="caption">Before the light.</span></div></div>
+<div class="copy"><p class="eyebrow">Savitara · Moon I</p><h1 aria-label="Light, considered. Design, refined. Balance, achieved."><span class="headline-frame" aria-hidden="true">Light,<br>considered.</span><span class="headline-frame" aria-hidden="true">Design,<br>refined.</span><span class="headline-frame" aria-hidden="true">Balance,<br>achieved.</span></h1><p class="description">A little light changes everything.<br>The shape. The texture. The feeling.</p><div class="chapter"><span id="number">01 / 03</span><span id="caption">Before the light.</span></div></div>
 <div class="bottom"><div class="scroll" id="hint">SCROLL TO SHAPE THE LIGHT<br>Slowly. In either direction.</div><div class="meters" aria-hidden="true"><div class="meter"><label>KEY <span id="key-value">0%</span></label><div class="track"><i id="key-bar"></i></div></div><div class="meter"><label>FILL <span id="fill-value">0%</span></label><div class="track"><i id="fill-bar"></i></div></div></div></div><div class="progress" aria-hidden="true"></div>
 </div></section>
-<section class="end" id="moon"><div><p class="eyebrow">Moon 1 · By Savitara</p><h2>Precision you see.<br>Calm you feel.</h2></div><div><p>Light gives a surface its character. A deliberate highlight. A shadow with depth. Just enough softness to bring the scene together.</p><p>Moon 1 is a studio light shaped around that intention.</p><button class="replay">Replay the light study ↑</button></div></section>
-</main><button class="motion" hidden>Pause lighting</button><footer class="footer"><span>© 2026 Savitara</span><span>Design prototype · Material study, not a Moon 1 product render</span></footer>
+<section class="end" id="moon"><div><p class="eyebrow">Moon I · By Savitara</p><h2>Precision you see.<br>Calm you feel.</h2></div><div><p>Light gives a surface its character. A deliberate highlight. A shadow with depth. Just enough softness to bring the scene together.</p><p>Moon I is a studio light shaped around that intention.</p><button class="replay">Replay the light study ↑</button></div></section>
+</main><button class="motion" hidden>Pause lighting</button><footer class="footer"><span>© 2026 Savitara</span><span>Design prototype · Material study, not a Moon I product render</span></footer>
 <script>
 (()=>{'use strict';
 const canvas=document.querySelector('canvas'),ctx=canvas.getContext('2d'),journey=document.querySelector('.journey'),reduce=matchMedia('(prefers-reduced-motion: reduce)'),pause=document.querySelector('.motion');
-const size=540,img=ctx.createImageData(size,size),pixels=[];
+const size=Math.min(1880,Math.max(1080,Math.round(canvas.getBoundingClientRect().width*Math.min(devicePixelRatio||1,2))));
+canvas.width=canvas.height=size;
+const img=ctx.createImageData(size,size),pixels=[];
+const gamma=new Uint8Array(4097);for(let i=0;i<=4096;i++)gamma[i]=Math.round(255*Math.pow(i/4096,.8));
 // Surface normals provide directional shading, rather than a glow over a photograph.
-for(let y=0;y<size;y++)for(let x=0;x<size;x++){const nx=(x-size/2)/(size*.355),ny=(size/2-y)/(size*.355),r2=nx*nx+ny*ny;if(r2<=1){const nz=Math.sqrt(1-r2);pixels.push({i:(y*size+x)*4,nx,ny,nz,key:Math.max(0,nx*.68+ny*.56+nz*.47),fill:Math.max(0,-nx*.82-ny*.1+nz*.56),grain:Math.sin(x*12.9898+y*78.233)*.006});}}
+const radius=size*.355;
+for(let y=0;y<size;y++)for(let x=0;x<size;x++){
+ const nx=(x+.5-size/2)/radius,ny=(size/2-y-.5)/radius,r=Math.hypot(nx,ny);
+ if(r<1+1/radius){
+  const nz=Math.sqrt(Math.max(0,1-r*r)),key=Math.max(0,nx*.68+ny*.56+nz*.47),fill=Math.max(0,-nx*.82-ny*.1+nz*.56);
+  pixels.push((y*size+x)*4,.012+Math.pow(1-nz,3)*.023,key*.69+Math.pow(key,28)*.25,fill*.31,Math.round(Math.max(0,Math.min(1,(1-r)*radius+.5))*255));
+ }
+}
+const lighting=new Float32Array(pixels);pixels.length=0;
 let queued=false,paused=false,last=-1;
 const clamp=v=>Math.max(0,Math.min(1,v)),smooth=(a,b,v)=>{const t=clamp((v-a)/(b-a));return t*t*(3-2*t)};
-function paint(p){const key=smooth(.04,.53,p),fill=smooth(.55,.98,p);img.data.fill(0);for(const v of pixels){const edge=Math.pow(1-v.nz,3)*.023;const k=key*(v.key*.69+Math.pow(v.key,28)*.25),f=fill*v.fill*.31;const a=.012+edge+v.grain;img.data[v.i]=255*Math.pow(clamp(a+k+f*.82),.8);img.data[v.i+1]=255*Math.pow(clamp(a*.98+k*.9+f*.9),.8);img.data[v.i+2]=255*Math.pow(clamp(a*.85+k*.69+f*.84),.8);img.data[v.i+3]=255;}ctx.putImageData(img,0,0);document.documentElement.style.setProperty('--ambient',(.02+key*.12+fill*.065).toFixed(3));document.querySelector('#key-value').textContent=Math.round(key*100)+'%';document.querySelector('#fill-value').textContent=Math.round(fill*100)+'%';document.querySelector('#key-bar').style.width=key*100+'%';document.querySelector('#fill-bar').style.width=fill*100+'%';document.querySelector('.progress').style.width=p*100+'%';const phase=p<.18?0:p<.6?1:2;document.querySelector('#number').textContent=['01 / 03','02 / 03','03 / 03'][phase];document.querySelector('#caption').textContent=['Before the light.','One light. A world of depth.','The balance of two.'][phase];canvas.dataset.progress=p.toFixed(4);canvas.dataset.key=key.toFixed(4);canvas.dataset.fill=fill.toFixed(4);}
+function paint(p){const key=smooth(.04,.53,p),fill=smooth(.55,.98,p);img.data.fill(0);for(let j=0;j<lighting.length;j+=5){
+ const i=lighting[j],a=lighting[j+1],k=key*lighting[j+2],f=fill*lighting[j+3];
+ img.data[i]=gamma[Math.round(clamp(a+k+f*.82)*4096)];
+ img.data[i+1]=gamma[Math.round(clamp(a*.98+k*.9+f*.9)*4096)];
+ img.data[i+2]=gamma[Math.round(clamp(a*.85+k*.69+f*.84)*4096)];
+ img.data[i+3]=lighting[j+4];
+}ctx.putImageData(img,0,0);document.documentElement.style.setProperty('--ambient',(.02+key*.12+fill*.065).toFixed(3));document.querySelector('#key-value').textContent=Math.round(key*100)+'%';document.querySelector('#fill-value').textContent=Math.round(fill*100)+'%';document.querySelector('#key-bar').style.width=key*100+'%';document.querySelector('#fill-bar').style.width=fill*100+'%';document.querySelector('.progress').style.width=p*100+'%';const t1=smooth(.23,.34,p),t2=smooth(.64,.75,p);
+const weights=[1-t1,t1*(1-t2),t2];
+document.querySelectorAll('.headline-frame').forEach((el,i)=>{el.style.opacity=weights[i];el.style.transform='translateY('+((1-weights[i])*12)+'px)';});
+const phase=p<.285?0:p<.695?1:2;document.querySelector('#number').textContent=['01 / 03','02 / 03','03 / 03'][phase];document.querySelector('#caption').textContent=['Before the light.','One light. A world of depth.','The balance of two.'][phase];canvas.dataset.progress=p.toFixed(4);canvas.dataset.key=key.toFixed(4);canvas.dataset.fill=fill.toFixed(4);}
 function render(){queued=false;if(paused)return;const p=reduce.matches?1:clamp(-journey.getBoundingClientRect().top/Math.max(1,journey.offsetHeight-innerHeight));if(Math.abs(last-p)>.0001){paint(p);last=p;}}
 function request(){if(!queued){queued=true;requestAnimationFrame(render)}}
 function motion(){last=-1;document.querySelector('#hint').textContent=reduce.matches?'STILL LIGHT STUDY · REDUCED MOTION':'SCROLL TO SHAPE THE LIGHT · IN EITHER DIRECTION';request()}
 addEventListener('scroll',request,{passive:true});addEventListener('resize',request);reduce.addEventListener('change',motion);document.querySelector('.replay').addEventListener('click',()=>scrollTo({top:0,behavior:'instant'}));motion();
 })();
 </script></body></html>
+
