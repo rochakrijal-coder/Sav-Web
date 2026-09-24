@@ -43,7 +43,7 @@ jobs:
           test -s style.css
           rsync -rt --chmod=D755,F644 \
             -e "ssh -i $HOME/.ssh/linode_deploy -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=20" \
-            index.html style.css sheet_aug_10.mp4 \
+            index.html style.css moon-scene.js assets sheet_aug_10.mp4 \
             deploy@172.236.123.73:/var/www/html/
 
       - name: Verify live HTML matches this commit

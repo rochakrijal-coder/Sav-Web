@@ -10,7 +10,7 @@
     content="Savitara Moon I. An interactive study of light, form and atmosphere."
   >
 
-  <link rel="stylesheet" href="./style.css?v=headline-scroll-6">
+  <link rel="stylesheet" href="./style.css?v=moon-3d-1">
 
   <style>
     /* Keep the headline area stable as phrases move through it. */
@@ -56,157 +56,14 @@
       <div class="stage">
         <div class="ambient" aria-hidden="true"></div>
 
-        <svg
-          class="sphere"
-          viewBox="0 0 1000 1000"
-          role="img"
-          aria-label="Smooth material sphere with two studio lights rising together"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <radialGradient
-              id="sphere-base"
-              gradientUnits="userSpaceOnUse"
-              cx="615" cy="325" r="590"
-            >
-              <stop stop-color="#6b7050"/>
-              <stop offset=".38" stop-color="#444b32"/>
-              <stop offset=".72" stop-color="#242b19"/>
-              <stop offset="1" stop-color="#11160d"/>
-            </radialGradient>
-
-            <radialGradient
-              id="sphere-key"
-              gradientUnits="userSpaceOnUse"
-              cx="653" cy="295" r="635"
-            >
-              <stop stop-color="#f1e8c9"/>
-              <stop offset=".15" stop-color="#d9d1ad"/>
-              <stop offset=".37" stop-color="#a6a582"/>
-              <stop offset=".60" stop-color="#60684a"/>
-              <stop offset=".82" stop-color="#2c3521"/>
-              <stop offset="1" stop-color="#151d11"/>
-            </radialGradient>
-
-            <radialGradient
-              id="sphere-fill"
-              gradientUnits="userSpaceOnUse"
-              cx="235" cy="505" r="405"
-            >
-              <stop stop-color="#c5cca4" stop-opacity=".48"/>
-              <stop
-                offset=".35"
-                stop-color="#a2b180"
-                stop-opacity=".24"
-              />
-              <stop
-                offset=".8"
-                stop-color="#87966b"
-                stop-opacity=".035"
-              />
-              <stop
-                offset="1"
-                stop-color="#87966b"
-                stop-opacity="0"
-              />
-            </radialGradient>
-
-            <radialGradient
-              id="sphere-shape"
-              gradientUnits="userSpaceOnUse"
-              cx="500" cy="500" r="355"
-            >
-              <stop
-                offset=".42"
-                stop-color="#0e1509"
-                stop-opacity="0"
-              />
-              <stop
-                offset=".73"
-                stop-color="#0e1509"
-                stop-opacity=".04"
-              />
-              <stop
-                offset=".9"
-                stop-color="#0e1509"
-                stop-opacity=".18"
-              />
-              <stop
-                offset="1"
-                stop-color="#0e1509"
-                stop-opacity=".4"
-              />
-            </radialGradient>
-
-            <radialGradient
-              id="sphere-bounce"
-              gradientUnits="userSpaceOnUse"
-              cx="290" cy="700" r="220"
-            >
-              <stop stop-color="#a5ae78" stop-opacity=".13"/>
-              <stop
-                offset="1"
-                stop-color="#a5ae78"
-                stop-opacity="0"
-              />
-            </radialGradient>
-
-            <radialGradient id="ground-shadow">
-              <stop stop-color="#080c05" stop-opacity=".64"/>
-              <stop
-                offset=".5"
-                stop-color="#080c05"
-                stop-opacity=".26"
-              />
-              <stop
-                offset="1"
-                stop-color="#080c05"
-                stop-opacity="0"
-              />
-            </radialGradient>
-
-            <clipPath id="sphere-boundary">
-              <circle cx="500" cy="500" r="355"/>
-            </clipPath>
-          </defs>
-
-          <ellipse
-            cx="463" cy="868"
-            rx="300" ry="48"
-            fill="url(#ground-shadow)"
-            opacity=".72"
-          />
-
-          <g clip-path="url(#sphere-boundary)">
-            <path
-              fill="url(#sphere-base)"
-              d="M0 0h1000v1000H0z"
-            />
-            <path
-              id="sphere-key-layer"
-              opacity=".06"
-              fill="url(#sphere-key)"
-              d="M0 0h1000v1000H0z"
-            />
-            <path
-              id="sphere-fill-layer"
-              opacity=".025"
-              fill="url(#sphere-fill)"
-              d="M0 0h1000v1000H0z"
-            />
-            <path
-              fill="url(#sphere-shape)"
-              d="M0 0h1000v1000H0z"
-            />
-            <path
-              fill="url(#sphere-bounce)"
-              d="M0 0h1000v1000H0z"
-            />
-          </g>
-        </svg>
+        <div class="sphere moon-scene" role="img" aria-label="A three-dimensional Moon illuminated by two studio lights">
+          <div class="moon-halo" aria-hidden="true"></div>
+          <img class="moon-poster" src="./assets/moon-poster.webp" alt="" aria-hidden="true">
+          <canvas class="moon-canvas" aria-hidden="true"></canvas>
+        </div>
 
         <div class="study-note">
-          LIGHT STUDY / 001 · CONCEPT GEOMETRY
+          LIGHT STUDY / 001 · LUNAR SURFACE
         </div>
 
         <div class="copy">
@@ -281,7 +138,7 @@
   <footer class="footer">
     <span>© 2026 Savitara</span>
     <span>
-      Design prototype · Material study, not a Moon I product render
+      Design prototype · Lunar light study
     </span>
   </footer>
 
@@ -295,8 +152,6 @@
 
       const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
-      const keyLayer = document.querySelector('#sphere-key-layer');
-      const fillLayer = document.querySelector('#sphere-fill-layer');
       const frames = [...document.querySelectorAll('.headline-frame')];
 
       const clamp = value => Math.max(0, Math.min(1, value));
@@ -315,8 +170,10 @@
         const key = .06 + .94 * exposure;
         const fill = .025 + .575 * exposure;
 
-        keyLayer.setAttribute('opacity', key.toFixed(4));
-        fillLayer.setAttribute('opacity', fill.toFixed(4));
+        sphere.style.setProperty('--moon-glow', (.02 + .22 * exposure).toFixed(4));
+        sphere.style.setProperty('--moon-brightness', (.2 + .8 * exposure).toFixed(4));
+        window.savitaraLight = { progress: p, exposure };
+        window.dispatchEvent(new CustomEvent('savitara:light', { detail: window.savitaraLight }));
 
         document.documentElement.style.setProperty(
           '--ambient',
@@ -438,5 +295,6 @@
 
     })();
   </script>
+  <script defer src="./moon-scene.js?v=1"></script>
 </body>
 </html>
