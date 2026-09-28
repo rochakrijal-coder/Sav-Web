@@ -10,7 +10,7 @@
     content="Savitara Moon I. An interactive study of light, form and atmosphere."
   >
 
-  <link rel="stylesheet" href="./style.css?v=moon-3d-1">
+  <link rel="stylesheet" href="./style.css?v=moon-i-2">
 
   <style>
     /* Keep the headline area stable as phrases move through it. */
@@ -56,14 +56,14 @@
       <div class="stage">
         <div class="ambient" aria-hidden="true"></div>
 
-        <div class="sphere moon-scene" role="img" aria-label="A three-dimensional Moon illuminated by two studio lights">
+        <div class="sphere moon-scene" role="img" aria-label="Moon I studio light with a satin aluminum reflector and scroll-controlled warm illumination">
           <div class="moon-halo" aria-hidden="true"></div>
-          <img class="moon-poster" src="./assets/moon-poster.webp" alt="" aria-hidden="true">
+          <img class="moon-poster" src="./assets/moon-i-poster.webp" alt="" aria-hidden="true">
           <canvas class="moon-canvas" aria-hidden="true"></canvas>
         </div>
 
         <div class="study-note">
-          LIGHT STUDY / 001 · LUNAR SURFACE
+          LIGHT STUDY / 001 · MOON I
         </div>
 
         <div class="copy">
@@ -100,12 +100,12 @@
 
           <div class="meters" aria-hidden="true">
             <div class="meter">
-              <label>KEY <span id="key-value">0%</span></label>
+              <label>OUTPUT <span id="key-value">0%</span></label>
               <div class="track"><i id="key-bar"></i></div>
             </div>
 
             <div class="meter">
-              <label>FILL <span id="fill-value">0%</span></label>
+              <label>WARMTH <span id="fill-value">0%</span></label>
               <div class="track"><i id="fill-bar"></i></div>
             </div>
           </div>
@@ -138,7 +138,7 @@
   <footer class="footer">
     <span>© 2026 Savitara</span>
     <span>
-      Design prototype · Lunar light study
+      Design prototype · Moon I light study
     </span>
   </footer>
 
@@ -165,13 +165,13 @@
       let last = -1;
 
       function paint(p) {
-        // Both lights rise together. The fill stays softer.
+        // The reflector warms progressively as the visitor scrolls.
         const exposure = smooth(0, 1, p);
-        const key = .06 + .94 * exposure;
-        const fill = .025 + .575 * exposure;
+        const key = exposure;
+        const fill = exposure;
 
         sphere.style.setProperty('--moon-glow', (.02 + .22 * exposure).toFixed(4));
-        sphere.style.setProperty('--moon-brightness', (.2 + .8 * exposure).toFixed(4));
+        sphere.style.setProperty('--moon-brightness', (.75 + .25 * exposure).toFixed(4));
         window.savitaraLight = { progress: p, exposure };
         window.dispatchEvent(new CustomEvent('savitara:light', { detail: window.savitaraLight }));
 
@@ -226,8 +226,8 @@
 
         document.querySelector('#caption').textContent = [
           'Light takes shape.',
-          'Two lights. One composition.',
-          'The balance of two.'
+          'Warmth from within.',
+          'Your scene, illuminated.'
         ][phase];
 
         sphere.dataset.progress = p.toFixed(4);
@@ -295,6 +295,7 @@
 
     })();
   </script>
-  <script defer src="./moon-scene.js?v=1"></script>
+  <script defer src="./moon-scene.js?v=moon-i-2"></script>
 </body>
 </html>
+

@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "three": "^0.186.1",
+    "esbuild": "^0.28.2",
+    "@gltf-transform/cli": "^4.5.0"
+  },
+  "private": true,
+  "scripts": {
+    "build": "esbuild src/moon-scene.js --bundle --minify --outfile=moon-scene.js"
+  }
+}
