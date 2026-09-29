@@ -10,7 +10,7 @@
     content="Savitara Moon I. An interactive study of light, form and atmosphere."
   >
 
-  <link rel="stylesheet" href="./style.css?v=moon-i-3">
+  <link rel="stylesheet" href="./style.css?v=moon-i-4">
 
   <style>
     /* Keep the headline area stable as phrases move through it. */
@@ -168,7 +168,7 @@
         // External key and fill lights reveal the unlit product.
         const exposure = smooth(0, 1, p);
         const key = .06 + .94 * exposure;
-        const fill = .025 + .575 * exposure;
+        const fill = .20 + .25 * exposure;
 
         sphere.style.setProperty('--moon-glow', (.02 + .22 * exposure).toFixed(4));
         sphere.style.setProperty('--moon-brightness', (.12 + .88 * exposure).toFixed(4));
@@ -295,7 +295,7 @@
 
     })();
   </script>
-  <script defer src="./moon-scene.js?v=moon-i-3"></script>
+  <script defer src="./moon-scene.js?v=moon-i-4"></script>
 </body>
 </html>
 

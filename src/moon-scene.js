@@ -40,9 +40,9 @@ try {
     // Fixed rear three-quarter view, matching the supplied reference.
     pivot.rotation.set(.16, -.85, 0);
     key.intensity=.08+3.2*e;
-    fill.intensity=.025+1.8*e;
+    fill.intensity=.8+1.0*e;
     rim.intensity=.04+.65*e;
-    scene.environmentIntensity=.025+1.5*e;
+    scene.environmentIntensity=.25+1.275*e;
     renderer.render(scene,camera);
     host.dataset.ready='true';
   }
