@@ -4,11 +4,20 @@ Custom website exploration for Moon 1. Brand direction: technical precision and 
 
 ## Workflow
 
-Store source and revision history in this private repository. Build and review a browser prototype before purchasing Linode hosting or changing the production domain. GitHub repository access alone does not provide a running website preview.
+Store source and revision history in this private repository. The current browser prototype is a static site and can be reviewed locally. GitHub repository access alone does not provide a running website preview.
 
-The existing Webflow site remains untouched. No production deployment is configured.
+The existing Webflow site remains untouched. A gated Linode deployment workflow is configured; it runs only on `main` when the `LINODE_DEPLOY_ENABLED` repository variable is `true`, and requires the Linode SSH secrets.
 
-## First prototype
+## Repository layout
+
+- `src/` contains editable JavaScript source for the Three.js scene.
+- `public/` contains the site entry point, styles, runtime assets, and generated scene bundle. This directory is deployed as-is.
+- Root-level package files define the build tooling and lock its versions.
+- `.github/workflows/` contains the gated Linode deployment workflow.
+
+Run `pnpm install` and `pnpm build` to generate `public/moon-scene.js`. To preview locally, serve `public/` with any static HTTP server; opening the HTML directly as a file may prevent the model from loading.
+
+## Prototype
 
 An opening product scene with a continuous scroll-controlled lighting sequence:
 
@@ -36,4 +45,4 @@ Target Linode after prototype approval. Keep the frontend portable and avoid hos
 
 ## Current status
 
-Repository initialized with the project brief. Website implementation and browser preview are not created yet.
+The initial Moon I light-study prototype is implemented. It uses a Three.js model with a poster fallback and scroll-driven lighting, and supports a reduced-motion static state. The deployment workflow is present but remains gated on repository configuration. Verify the page against the checklist above before enabling production deployment.

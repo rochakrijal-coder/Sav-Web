@@ -39,11 +39,11 @@ jobs:
       - name: Upload website files
         run: |
           set -euo pipefail
-          test -s index.html
-          test -s style.css
+          test -s public/index.html
+          test -s public/style.css
           rsync -rt --chmod=D755,F644 \
             -e "ssh -i $HOME/.ssh/linode_deploy -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=20" \
-            index.html style.css moon-scene.js assets sheet_aug_10.mp4 \
+            public/ \
             deploy@172.236.123.73:/var/www/html/
 
       - name: Verify live HTML matches this commit
@@ -52,7 +52,7 @@ jobs:
           curl --fail --silent --show-error --retry 3 --max-time 30 \
             --resolve savitara.org:443:172.236.123.73 \
             "https://savitara.org/?deploy=$GITHUB_SHA" -o /tmp/live-index.html
-          cmp index.html /tmp/live-index.html
+          cmp public/index.html /tmp/live-index.html
 
       - name: Remove deployment key
         if: always()
