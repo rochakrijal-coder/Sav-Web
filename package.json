@@ -6,6 +6,6 @@
   },
   "private": true,
   "scripts": {
-    "build": "esbuild src/moon-scene.js --bundle --minify --outfile=moon-scene.js"
+    "build": "esbuild src/moon-scene.js --bundle --minify --outfile=public/moon-scene.js"
   }
 }
