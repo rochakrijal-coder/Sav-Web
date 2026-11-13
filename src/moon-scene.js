@@ -20,7 +20,7 @@ try {
   scene.environmentIntensity = .06;
   room.dispose(); pmrem.dispose();
   const camera = new THREE.PerspectiveCamera(34, 1, .05, 50);
-  camera.position.set(0,.12,5.4);
+  camera.position.set(0,0,5.4);
   camera.lookAt(0,0,0);
   const key = new THREE.DirectionalLight(0xfff2df, 2.8);
   key.position.set(-3,4,5);
@@ -46,7 +46,6 @@ try {
     const dx=event.clientX-lastX, dy=event.clientY-lastY;
     lastX=event.clientX; lastY=event.clientY;
     velocity=dx*.008; dragYaw+=velocity;
-    dragPitch=THREE.MathUtils.clamp(dragPitch+dy*.004,-.35,.45);
     requestDraw();
   });
   const release=()=>{ if(!dragging)return; dragging=false; host.dataset.dragging='false'; if(!reduceMotion.matches)coast(); };
@@ -78,7 +77,8 @@ try {
     // Scroll turns it from the rear to a front three-quarter view, eased at both ends.
     const t=light.progress, eased=t*t*(3-2*t);
     const scrollYaw=(reduceMotion.matches?1:eased)*3.2;
-    pivot.rotation.set(.16+dragPitch, -.85+scrollYaw+dragYaw, 0, 'YXZ');
+    // Keep the light level: turn around the vertical axis only.
+    pivot.rotation.set(0, -.85+scrollYaw+dragYaw, 0, 'YXZ');
     key.intensity=.08+3.2*e;
     fill.intensity=.8+1.0*e;
     rim.intensity=.04+.65*e;
