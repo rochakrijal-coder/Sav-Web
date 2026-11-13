@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Savitara Moon I — a studio light you can dial in</title>
-  <meta name="description" content="Moon I is a COB studio light for photographers, videographers and small shops. Warm to cool or full color, from the dial or your phone.">
+  <title>Savitr I by Savitara — a studio light you can dial in</title>
+  <meta name="description" content="Savitr I is a COB studio light for photographers, videographers and small shops. Warm to cool or full color, from the dial or your phone.">
   <meta name="theme-color" content="#1b1d20">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1d20'/%3E%3Ccircle cx='16' cy='16' r='8' fill='%23f2ae62'/%3E%3C/svg%3E">
   <link rel="preload" href="./assets/archivo.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./style.css?v=moon-i-5">
+  <link rel="stylesheet" href="./style.css?v=moon-i-7">
 </head>
 
 <body>
@@ -17,7 +17,7 @@
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="Savitara home">Savitara</a>
     <nav aria-label="Main">
-      <a href="#moon">Moon I</a>
+      <a href="#moon">Savitr I</a>
       <a href="#gaffer">Gaffer Mode</a>
       <a class="nav-cta" href="#reserve">Reserve</a>
     </nav>
@@ -25,17 +25,17 @@
 
   <main id="top">
     <!-- Scroll brings the studio lights up; the slider sets their colour. -->
-    <section class="journey" aria-label="Moon I, lit by two studio lights as you scroll">
+    <section class="journey" aria-label="Savitr I, lit by two studio lights as you scroll">
       <div class="stage">
         <div class="ambient" aria-hidden="true"></div>
 
-        <div class="sphere moon-scene" role="img" aria-label="Moon I studio light seen from the rear three-quarter angle">
+        <div class="sphere moon-scene" role="img" aria-label="Savitr I studio light seen from the rear three-quarter angle">
           <img class="moon-poster" src="./assets/moon-i-rear-poster.webp" alt="" aria-hidden="true">
           <canvas class="moon-canvas" aria-hidden="true"></canvas>
         </div>
 
         <div class="hero-copy">
-          <h1 class="product-name">Moon<span class="numeral">I</span></h1>
+          <h1 class="product-name">Savitr<span class="numeral">I</span></h1>
           <p class="lede">
             A COB studio light for photographers and videographers.
             Warm tungsten to cool daylight, or any color, from the dial on
@@ -60,7 +60,7 @@
             <input id="cct" type="range" min="2700" max="6500" step="100" value="4300" aria-describedby="hint">
             <output class="readout-value" for="cct" id="cct-value">4300 K</output>
           </label>
-          <p class="hint" id="hint">Scroll to bring the lights up. Drag to change their color.</p>
+          <p class="hint" id="hint">Scroll to bring the lights up. Drag the light to turn it, and the slider to change its color.</p>
         </div>
 
         <div class="progress" aria-hidden="true"></div>
@@ -99,14 +99,14 @@
     </section>
 
     <section class="audience" aria-labelledby="audience-title">
-      <h2 id="audience-title" class="visually-hidden">Who Moon I is for</h2>
+      <h2 id="audience-title" class="visually-hidden">Who Savitr I is for</h2>
       <div>
         <h3>For creators</h3>
         <p>Portraits, interviews and short films. A light that is quick to set up and gives the same result every time you come back to a look.</p>
       </div>
       <div>
         <h3>For shops shooting their own products</h3>
-        <p>New product and no photographer? Moon I gives you clean, professional light for listings and ads from a desk or kitchen table.</p>
+        <p>New product and no photographer? Savitr I gives you clean, professional light for listings and ads from a desk or kitchen table.</p>
       </div>
     </section>
 
@@ -115,7 +115,7 @@
         <h2 id="reserve-title">Be one of the first twenty.</h2>
       </div>
       <div class="reserve-body">
-        <p>Moon I is assembled in small batches in Nebraska. The first twenty go to a founding group of creators who help build the shared preset library and get a direct line to the team.</p>
+        <p>Savitr I is assembled in small batches in Nebraska. The first twenty go to a founding group of creators who help build the shared preset library and get a direct line to the team.</p>
         <p>First units are planned for February 2027.</p>
         <!-- TODO: point this at the Webflow "Reserve your spot" checkout. -->
         <a class="button" href="#reserve" data-reserve-link>Reserve your spot</a>
@@ -181,8 +181,10 @@
         if (caption.textContent !== next) caption.textContent = next;
       }
 
+      const header = document.querySelector('.site-header');
       function render() {
         queued = false;
+        header.classList.toggle('on-light', journey.getBoundingClientRect().bottom < header.offsetHeight);
         const travel = Math.max(1, journey.offsetHeight - stage.offsetHeight);
         const p = reduced.matches ? 1 : clamp(-journey.getBoundingClientRect().top / travel);
         if (Math.abs(progress - p) > .0001) { progress = p; paint(); }
@@ -198,6 +200,6 @@
       render();
     })();
   </script>
-  <script defer src="./moon-scene.js?v=moon-i-5"></script>
+  <script defer src="./moon-scene.js?v=moon-i-7"></script>
 </body>
 </html>
