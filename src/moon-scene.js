@@ -33,6 +33,16 @@ try {
   scene.add(pivot);
   let model, pending=false, visible=true, contextLost=false;
   let light = window.savitaraLight || {progress:0,exposure:0};
+  // Approximate a blackbody colour for a correlated colour temperature.
+  const cct=new THREE.Color();
+  function kelvinColor(k, target) {
+    const t=k/100;
+    const r=t<=66?255:329.7*Math.pow(t-60,-.1332);
+    const g=t<=66?99.47*Math.log(t)-161.12:288.12*Math.pow(t-60,-.0755);
+    const b=t>=66?255:t<=19?0:138.52*Math.log(t-10)-305.04;
+    const c=v=>Math.max(0,Math.min(255,v))/255;
+    return target.setRGB(c(r),c(g),c(b),THREE.SRGBColorSpace);
+  }
   function draw() {
     pending=false;
     if(!model || !visible || document.hidden || contextLost) return;
@@ -43,6 +53,9 @@ try {
     fill.intensity=.8+1.0*e;
     rim.intensity=.04+.65*e;
     scene.environmentIntensity=.25+1.275*e;
+    kelvinColor(light.kelvin||4300,cct);
+    key.color.copy(cct);
+    fill.color.copy(cct).lerp(new THREE.Color(0xd9e3d1),.35);
     renderer.render(scene,camera);
     host.dataset.ready='true';
   }
