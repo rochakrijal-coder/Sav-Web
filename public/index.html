@@ -3,143 +3,129 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Savitara — Light, considered.</title>
-  <meta
-    name="description"
-    content="Savitara Moon I. An interactive study of light, form and atmosphere."
-  >
-
-  <link rel="stylesheet" href="./style.css?v=moon-i-4">
-
-  <style>
-    /* Keep the headline area stable as phrases move through it. */
-    .copy h1 {
-      display: grid;
-      min-height: 2em;
-    }
-
-    .headline-frame {
-      grid-area: 1 / 1;
-      opacity: 0;
-      visibility: hidden;
-      will-change: opacity, transform;
-      transition: none;
-    }
-
-    .headline-frame:first-child {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .headline-frame {
-        will-change: auto;
-      }
-    }
-  </style>
+  <title>Savitara Moon I — a studio light you can dial in</title>
+  <meta name="description" content="Moon I is a COB studio light for photographers, videographers and small shops. Warm to cool or full color, from the dial or your phone.">
+  <meta name="theme-color" content="#1b1d20">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231b1d20'/%3E%3Ccircle cx='16' cy='16' r='8' fill='%23f2ae62'/%3E%3C/svg%3E">
+  <link rel="preload" href="./assets/archivo.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./style.css?v=moon-i-5">
 </head>
 
 <body>
-  <header>
-    <a class="brand" href="#top" aria-label="Savitara home">
-      SAVITARA
-    </a>
-    <a class="nav" href="#moon">Discover Moon I</a>
+  <a class="skip" href="#moon">Skip to product details</a>
+
+  <header class="site-header">
+    <a class="wordmark" href="#top" aria-label="Savitara home">Savitara</a>
+    <nav aria-label="Main">
+      <a href="#moon">Moon I</a>
+      <a href="#gaffer">Gaffer Mode</a>
+      <a class="nav-cta" href="#reserve">Reserve</a>
+    </nav>
   </header>
 
   <main id="top">
-    <section
-      class="journey"
-      aria-label="Interactive studio lighting study"
-    >
+    <!-- Scroll brings the studio lights up; the slider sets their colour. -->
+    <section class="journey" aria-label="Moon I, lit by two studio lights as you scroll">
       <div class="stage">
         <div class="ambient" aria-hidden="true"></div>
 
-        <div class="sphere moon-scene" role="img" aria-label="Moon I studio light viewed from the rear, revealed by two external studio lights as you scroll">
-          <div class="moon-halo" aria-hidden="true"></div>
+        <div class="sphere moon-scene" role="img" aria-label="Moon I studio light seen from the rear three-quarter angle">
           <img class="moon-poster" src="./assets/moon-i-rear-poster.webp" alt="" aria-hidden="true">
           <canvas class="moon-canvas" aria-hidden="true"></canvas>
         </div>
 
-        <div class="study-note">
-          LIGHT STUDY / 001 · MOON I
-        </div>
-
-        <div class="copy">
-          <p class="eyebrow">Savitara · Moon I</p>
-
-          <h1 aria-label="Light, considered. Design, refined. Balance, achieved.">
-            <span class="headline-frame" aria-hidden="true">
-              Light,<br>considered.
-            </span>
-            <span class="headline-frame" aria-hidden="true">
-              Design,<br>refined.
-            </span>
-            <span class="headline-frame" aria-hidden="true">
-              Balance,<br>achieved.
-            </span>
-          </h1>
-
-          <p class="description">
-            A little light changes everything.<br>
-            The shape. The texture. The feeling.
+        <div class="hero-copy">
+          <h1 class="product-name">Moon<span class="numeral">I</span></h1>
+          <p class="lede">
+            A COB studio light for photographers and videographers.
+            Warm tungsten to cool daylight, or any color, from the dial on
+            the back or from your phone.
           </p>
-
-          <div class="chapter">
-            <span id="number">01 / 03</span>
-            <span id="caption">Light takes shape.</span>
-          </div>
+          <p class="status" id="caption">The lights are off.</p>
         </div>
 
-        <div class="bottom">
-          <div class="scroll" id="hint">
-            SCROLL TO SHAPE THE LIGHT<br>
-            Slowly. In either direction.
+        <div class="console">
+          <div class="readout" aria-hidden="true">
+            <span class="readout-label">Key</span>
+            <span class="track"><i id="key-bar"></i></span>
+            <span class="readout-value" id="key-value">0%</span>
           </div>
-
-          <div class="meters" aria-hidden="true">
-            <div class="meter">
-              <label>KEY <span id="key-value">0%</span></label>
-              <div class="track"><i id="key-bar"></i></div>
-            </div>
-
-            <div class="meter">
-              <label>FILL <span id="fill-value">0%</span></label>
-              <div class="track"><i id="fill-bar"></i></div>
-            </div>
+          <div class="readout" aria-hidden="true">
+            <span class="readout-label">Fill</span>
+            <span class="track"><i id="fill-bar"></i></span>
+            <span class="readout-value" id="fill-value">0%</span>
           </div>
+          <label class="readout cct">
+            <span class="readout-label">Color temp</span>
+            <input id="cct" type="range" min="2700" max="6500" step="100" value="4300" aria-describedby="hint">
+            <output class="readout-value" for="cct" id="cct-value">4300 K</output>
+          </label>
+          <p class="hint" id="hint">Scroll to bring the lights up. Drag to change their color.</p>
         </div>
 
         <div class="progress" aria-hidden="true"></div>
       </div>
     </section>
 
-    <section class="end" id="moon">
-      <div>
-        <p class="eyebrow">Moon I · By Savitara</p>
-        <h2>Precision you see.<br>Calm you feel.</h2>
+    <section class="features" id="moon" aria-labelledby="features-title">
+      <h2 id="features-title">One light that covers the whole shoot.</h2>
+      <div class="feature-list">
+        <article>
+          <h3>Every white, and every color</h3>
+          <p>An RGBWW COB engine mixes warm and cool white for clean skin tones, and full color when the scene needs a gel.</p>
+        </article>
+        <article>
+          <h3>A dial, or your phone</h3>
+          <p>Turn the dial on the back for quick changes on set. Connect over Bluetooth when you want exact values you can save and repeat.</p>
+        </article>
+        <article>
+          <h3>Built to stay cool</h3>
+          <p>The power supply and LED driver sit in their own cavity, away from the light engine, so heat stays where it belongs.</p>
+        </article>
       </div>
+    </section>
 
+    <section class="gaffer" id="gaffer" aria-labelledby="gaffer-title">
+      <div class="gaffer-intro">
+        <p class="tag">In development</p>
+        <h2 id="gaffer-title">Gaffer Mode</h2>
+        <p>Show Savitara the shot you want. It works out the rest of the lighting plan and sets your lights to match.</p>
+      </div>
+      <ol class="steps">
+        <li><h3>Scan your room</h3><p>Your iPhone maps the space you are shooting in.</p></li>
+        <li><h3>Add a reference</h3><p>Pick a photo or clip with the look you want to recreate.</p></li>
+        <li><h3>Place and set</h3><p>See how many lights you need and where they go. Savitara sets each one.</p></li>
+      </ol>
+    </section>
+
+    <section class="audience" aria-labelledby="audience-title">
+      <h2 id="audience-title" class="visually-hidden">Who Moon I is for</h2>
       <div>
-        <p>
-          Light gives a surface its character. A deliberate highlight.
-          A shadow with depth. Just enough softness to bring the
-          scene together.
-        </p>
-        <p>Moon I is a studio light shaped around that intention.</p>
-        <button class="replay" type="button">
-          Replay the light study ↑
-        </button>
+        <h3>For creators</h3>
+        <p>Portraits, interviews and short films. A light that is quick to set up and gives the same result every time you come back to a look.</p>
+      </div>
+      <div>
+        <h3>For shops shooting their own products</h3>
+        <p>New product and no photographer? Moon I gives you clean, professional light for listings and ads from a desk or kitchen table.</p>
+      </div>
+    </section>
+
+    <section class="reserve" id="reserve" aria-labelledby="reserve-title">
+      <div>
+        <h2 id="reserve-title">Be one of the first twenty.</h2>
+      </div>
+      <div class="reserve-body">
+        <p>Moon I is assembled in small batches in Nebraska. The first twenty go to a founding group of creators who help build the shared preset library and get a direct line to the team.</p>
+        <p>First units are planned for February 2027.</p>
+        <!-- TODO: point this at the Webflow "Reserve your spot" checkout. -->
+        <a class="button" href="#reserve" data-reserve-link>Reserve your spot</a>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <span>© 2026 Savitara</span>
-    <span>
-      Design prototype · Moon I light study
-    </span>
+    <span>© 2026 Savitara LLC</span>
+    <span>Omaha, Nebraska</span>
   </footer>
 
   <script>
@@ -148,154 +134,70 @@
 
       const journey = document.querySelector('.journey');
       const stage = document.querySelector('.stage');
-      const sphere = document.querySelector('.sphere');
-
+      const scene = document.querySelector('.moon-scene');
+      const slider = document.querySelector('#cct');
+      const cctValue = document.querySelector('#cct-value');
+      const caption = document.querySelector('#caption');
       const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
-      const frames = [...document.querySelectorAll('.headline-frame')];
+      const clamp = v => Math.max(0, Math.min(1, v));
+      const smooth = (a, b, v) => { const t = clamp((v - a) / (b - a)); return t * t * (3 - 2 * t); };
 
-      const clamp = value => Math.max(0, Math.min(1, value));
+      // Blackbody approximation, shared with the 3D scene.
+      function kelvinRGB(k) {
+        const t = k / 100;
+        const r = t <= 66 ? 255 : 329.7 * Math.pow(t - 60, -.1332);
+        const g = t <= 66 ? 99.47 * Math.log(t) - 161.12 : 288.12 * Math.pow(t - 60, -.0755);
+        const b = t >= 66 ? 255 : t <= 19 ? 0 : 138.52 * Math.log(t - 10) - 305.04;
+        return [r, g, b].map(v => Math.round(Math.max(0, Math.min(255, v))));
+      }
 
-      const smooth = (start, end, value) => {
-        const t = clamp((value - start) / (end - start));
-        return t * t * (3 - 2 * t);
-      };
+      let progress = -1, queued = false;
+      const captions = ['The lights are off.', 'Key light coming up.', 'Fill added. The shape is set.'];
 
-      let queued = false;
-      let last = -1;
-
-      function paint(p) {
-        // External key and fill lights reveal the unlit product.
+      function paint() {
+        const p = progress;
+        const kelvin = Number(slider.value);
         const exposure = smooth(0, 1, p);
         const key = .06 + .94 * exposure;
         const fill = .20 + .25 * exposure;
 
-        sphere.style.setProperty('--moon-glow', (.02 + .22 * exposure).toFixed(4));
-        sphere.style.setProperty('--moon-brightness', (.12 + .88 * exposure).toFixed(4));
-        window.savitaraLight = { progress: p, exposure };
+        const rgb = kelvinRGB(kelvin).join(' ');
+        const root = document.documentElement.style;
+        root.setProperty('--cct', rgb);
+        root.setProperty('--ambient', (.05 + exposure * .22).toFixed(4));
+        scene.style.setProperty('--moon-brightness', (.12 + .88 * exposure).toFixed(4));
+
+        window.savitaraLight = { progress: p, exposure, kelvin };
         window.dispatchEvent(new CustomEvent('savitara:light', { detail: window.savitaraLight }));
 
-        document.documentElement.style.setProperty(
-          '--ambient',
-          (.035 + exposure * .10).toFixed(4)
-        );
-
-        // Finish each exit before starting the next entrance.
-        const enters = [
-          1,
-          smooth(.28, .34, p),
-          smooth(.68, .74, p)
-        ];
-
-        const exits = [
-          smooth(.20, .26, p),
-          smooth(.60, .66, p),
-          0
-        ];
-
-        frames.forEach((el, i) => {
-          const opacity = enters[i] * (1 - exits[i]);
-
-          // Enter from above; leave downward.
-          const y = reduced.matches
-            ? 0
-            : -24 * (1 - enters[i]) + 24 * exits[i];
-
-          el.style.opacity = opacity;
-          el.style.transform = `translateY(${y}px)`;
-          el.style.visibility = opacity > 0 ? 'visible' : 'hidden';
-        });
-
-        for (const [id, value] of [['key', key], ['fill', fill]]) {
-          document.querySelector('#' + id + '-value').textContent =
-            Math.round(value * 100) + '%';
-
-          document.querySelector('#' + id + '-bar').style.width =
-            value * 100 + '%';
+        for (const [id, v] of [['key', key], ['fill', fill]]) {
+          document.querySelector('#' + id + '-value').textContent = Math.round(v * 100) + '%';
+          document.querySelector('#' + id + '-bar').style.width = v * 100 + '%';
         }
-
+        cctValue.textContent = kelvin + ' K';
         document.querySelector('.progress').style.width = p * 100 + '%';
-
-        const phase = p < .27 ? 0 : p < .67 ? 1 : 2;
-
-        document.querySelector('#number').textContent = [
-          '01 / 03',
-          '02 / 03',
-          '03 / 03'
-        ][phase];
-
-        document.querySelector('#caption').textContent = [
-          'Light takes shape.',
-          'Two lights. One composition.',
-          'Form, revealed.'
-        ][phase];
-
-        sphere.dataset.progress = p.toFixed(4);
-        sphere.dataset.key = key.toFixed(4);
-        sphere.dataset.fill = fill.toFixed(4);
+        const next = captions[p < .2 ? 0 : p < .7 ? 1 : 2];
+        if (caption.textContent !== next) caption.textContent = next;
       }
 
       function render() {
         queued = false;
-
-        const travel = Math.max(
-          1,
-          journey.offsetHeight - stage.offsetHeight
-        );
-
-        const p = reduced.matches
-          ? 1
-          : clamp(-journey.getBoundingClientRect().top / travel);
-
-        if (Math.abs(last - p) > .0001) {
-          paint(p);
-          last = p;
-        }
+        const travel = Math.max(1, journey.offsetHeight - stage.offsetHeight);
+        const p = reduced.matches ? 1 : clamp(-journey.getBoundingClientRect().top / travel);
+        if (Math.abs(progress - p) > .0001) { progress = p; paint(); }
       }
+      function request() { if (!queued) { queued = true; requestAnimationFrame(render); } }
 
-      function request() {
-        if (!queued) {
-          queued = true;
-          requestAnimationFrame(render);
-        }
-      }
-
-      function mode() {
-        last = -1;
-
-        document.querySelector('#hint').textContent = reduced.matches
-          ? 'STILL LIGHT STUDY · REDUCED MOTION'
-          : 'SCROLL TO SHAPE THE LIGHT · IN EITHER DIRECTION';
-
-        render();
-      }
-
-      // Capture scroll events from the document and nested preview containers.
       document.addEventListener('scroll', request, { passive: true, capture: true });
-      window.addEventListener('scroll', request, { passive: true });
-      window.addEventListener('pageshow', mode);
-      window.addEventListener('load', mode);
+      addEventListener('resize', () => { progress = -1; request(); });
+      addEventListener('pageshow', () => { progress = -1; render(); });
+      slider.addEventListener('input', paint);
+      if (reduced.addEventListener) reduced.addEventListener('change', () => { progress = -1; render(); });
 
-      addEventListener('resize', () => {
-        last = -1;
-        request();
-      });
-
-      // Paint immediately; optional media-query listeners must not block startup.
-      mode();
-      if (typeof reduced.addEventListener === 'function') {
-        reduced.addEventListener('change', mode);
-      } else if (typeof reduced.addListener === 'function') {
-        reduced.addListener(mode);
-      }
-
-      document.querySelector('.replay').addEventListener('click', () => {
-        scrollTo({ top: 0, behavior: 'instant' });
-      });
-
+      render();
     })();
   </script>
-  <script defer src="./moon-scene.js?v=moon-i-4"></script>
+  <script defer src="./moon-scene.js?v=moon-i-5"></script>
 </body>
 </html>
-
