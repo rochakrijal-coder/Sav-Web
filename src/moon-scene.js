@@ -33,6 +33,32 @@ try {
   scene.add(pivot);
   let model, pending=false, visible=true, contextLost=false;
   let light = window.savitaraLight || {progress:0,exposure:0};
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  // Drag to turn the light; scroll adds a half turn on top.
+  let dragYaw=0, dragPitch=0, velocity=0, dragging=false, lastX=0, lastY=0, spinning=false;
+  canvas.style.touchAction='pan-y';
+  canvas.addEventListener('pointerdown',event=>{
+    dragging=true; velocity=0; lastX=event.clientX; lastY=event.clientY;
+    canvas.setPointerCapture(event.pointerId); host.dataset.dragging='true';
+  });
+  canvas.addEventListener('pointermove',event=>{
+    if(!dragging)return;
+    const dx=event.clientX-lastX, dy=event.clientY-lastY;
+    lastX=event.clientX; lastY=event.clientY;
+    velocity=dx*.008; dragYaw+=velocity;
+    dragPitch=THREE.MathUtils.clamp(dragPitch+dy*.004,-.35,.45);
+    requestDraw();
+  });
+  const release=()=>{ if(!dragging)return; dragging=false; host.dataset.dragging='false'; if(!reduceMotion.matches)coast(); };
+  canvas.addEventListener('pointerup',release);
+  canvas.addEventListener('pointercancel',release);
+  function coast(){
+    if(spinning)return; spinning=true;
+    const step=()=>{ velocity*=.93; dragYaw+=velocity; requestDraw();
+      if(Math.abs(velocity)>.0005 && !dragging) requestAnimationFrame(step); else spinning=false; };
+    requestAnimationFrame(step);
+  }
+  window.savitaraTurn=(yaw,pitch=0)=>{dragYaw=yaw;dragPitch=pitch;requestDraw();};
   // Approximate a blackbody colour for a correlated colour temperature.
   const cct=new THREE.Color();
   function kelvinColor(k, target) {
@@ -48,7 +74,11 @@ try {
     if(!model || !visible || document.hidden || contextLost) return;
     const e=light.exposure;
     // Fixed rear three-quarter view, matching the supplied reference.
-    pivot.rotation.set(.16, -.85, 0);
+    // Start from the rear three-quarter reference view.
+    // Scroll turns it from the rear to a front three-quarter view, eased at both ends.
+    const t=light.progress, eased=t*t*(3-2*t);
+    const scrollYaw=(reduceMotion.matches?1:eased)*3.2;
+    pivot.rotation.set(.16+dragPitch, -.85+scrollYaw+dragYaw, 0, 'YXZ');
     key.intensity=.08+3.2*e;
     fill.intensity=.8+1.0*e;
     rim.intensity=.04+.65*e;
