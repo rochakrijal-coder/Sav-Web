@@ -1,48 +1,72 @@
 # Savitara website
 
-Custom website exploration for Moon 1. Brand direction: technical precision and calm confidence.
+The website for **Savitr I**, Savitara's COB studio light: https://savitara.org
 
-## Workflow
+It is a single static page with no framework. The top of the page shows a 3D model of the light. As the visitor scrolls, studio lights come up on it and it turns from the back to the front. Visitors can drag the light to spin it and use a slider to set the color temperature (2700–6500 K), which tints both the 3D lights and the glow behind them.
 
-Store source and revision history in this private repository. The current browser prototype is a static site and can be reviewed locally. GitHub repository access alone does not provide a running website preview.
+## Files
 
-The existing Webflow site remains untouched. A gated Linode deployment workflow is configured; it runs only on `main` when the `LINODE_DEPLOY_ENABLED` repository variable is `true`, and requires the Linode SSH secrets.
+```
+public/                     Everything in here is uploaded to the server as-is.
+  index.html                Page content and structure.
+  style.css                 All styling. Colors and spacing are named at the top (:root).
+  page.js                   Scroll-driven lighting and the color slider. Plain JS, edit directly.
+  light-scene.js            GENERATED from src/light-scene.js by `pnpm build`. Do not edit.
+  assets/
+    savitr-i.glb            3D model of the light (exported from Blender).
+    savitr-i-rear-poster.webp  Still image shown until the 3D model loads, or if WebGL is unavailable.
+    archivo.woff2           Archivo variable font (self-hosted; SIL Open Font License).
+src/
+  light-scene.js            Source for the 3D view (Three.js): camera, studio lights, drag to turn.
+archive/                    Earlier prototypes, kept for reference. Not used by the site.
+.github/workflows/
+  deploy-linode.yml         Uploads public/ to the Linode server on push to main (see Deploying).
+```
 
-## Repository layout
+## How the pieces talk to each other
 
-- `src/` contains editable JavaScript source for the Three.js scene.
-- `public/` contains the site entry point, styles, runtime assets, and generated scene bundle. This directory is deployed as-is.
-- Root-level package files define the build tooling and lock its versions.
-- `.github/workflows/` contains the gated Linode deployment workflow.
+`page.js` is the only code that reads the scroll position and the slider. On every change it:
 
-Run `pnpm install` and `pnpm build` to generate `public/moon-scene.js`. To preview locally, serve `public/` with any static HTTP server; opening the HTML directly as a file may prevent the model from loading.
+1. sets CSS variables on the page (`--cct` light color, `--ambient` glow strength, `--light-brightness` for the poster image), which `style.css` uses; and
+2. sends a `savitara:light` event with `{ progress, exposure, rgb }`, which `light-scene.js` listens to and redraws the 3D view.
 
-## Prototype
+`light-scene.js` never reads the page directly, so the 3D view can be changed or replaced without touching the scroll logic. If the model or WebGL fails, the poster image stays visible and the page still works.
 
-An opening product scene with a continuous scroll-controlled lighting sequence:
+## Working on it
 
-1. Begin with subdued ambient illumination while navigation and essential text remain readable.
-2. Gradually increase a directional key light from the upper right.
-3. Preserve a defined shadow side.
-4. Introduce a softer secondary fill light later in the sequence.
-5. Coordinate product detail and typography with the lighting progression.
-6. Reverse the sequence when scrolling backward.
+Requirements: Node.js and pnpm.
 
-Use real product photography or footage where available. Physically convincing relighting requires matching exposures, appropriate footage, or a 3D scene; a gradient overlay alone is not a faithful simulation of light on a face or product.
+```sh
+pnpm install          # once
+pnpm build            # after editing src/light-scene.js
+pnpm preview          # serves public/ at http://localhost:8080
+```
 
-## Verification before review
+Open the page through `pnpm preview` (or any local web server); opening `index.html` directly as a file stops the 3D model from loading.
 
-- Demonstrate different rendered states at the start, middle, and end of the scroll sequence.
-- Verify reverse scrolling, touch scrolling, and resizing.
-- Keep links and navigation usable throughout the animation.
-- Provide a readable static treatment for reduced-motion preferences.
-- Check desktop and mobile browser performance with the actual media assets.
-- Clearly identify any placeholder imagery or unimplemented forms.
+Edits to `index.html`, `style.css` and `page.js` need no build. When you change any CSS or JS file, bump the `?v=` number on its link in `index.html` so visitors' browsers fetch the new version instead of a cached copy.
 
-## Hosting direction
+### Common changes
 
-Target Linode after prototype approval. Keep the frontend portable and avoid host-specific dependencies. Server sizing and media delivery will be decided from the finished site's measured needs; the lowest-priced plan is not assumed sufficient for all future workloads.
+- **Text and sections:** `public/index.html`.
+- **Colors, fonts, spacing:** the variables at the top of `public/style.css`.
+- **How far you scroll before the lights are full, and the status messages:** constants at the top of `public/page.js`.
+- **Light brightness, start angle, how far scrolling turns the light, drag feel:** constants and the `draw()` function in `src/light-scene.js`, then `pnpm build`.
+- **A new 3D model:** replace `public/assets/savitr-i.glb` (keep the file name, or change `MODEL_URL` in `src/light-scene.js`). The script centers and scales the model automatically. Large models can be compressed with `npx gltf-transform optimize in.glb out.glb --compress meshopt`.
 
-## Current status
+### Before publishing a change, check
 
-The initial Moon I light-study prototype is implemented. It uses a Three.js model with a poster fallback and scroll-driven lighting, and supports a reduced-motion static state. The deployment workflow is present but remains gated on repository configuration. Verify the page against the checklist above before enabling production deployment.
+- Scrolling down and back up, on desktop and on a phone.
+- Dragging the light, and the color slider.
+- With "Reduce motion" turned on in the system settings: the page should show the lit, front-facing light without scroll animation.
+
+## Deploying
+
+Pushing to `main` runs `.github/workflows/deploy-linode.yml`, which uploads `public/` to the Linode server and checks that the live `index.html` matches the commit. It only runs when the repository variable `LINODE_DEPLOY_ENABLED` is `true` and the `LINODE_SSH_KEY` and `LINODE_KNOWN_HOSTS` secrets are set.
+
+The upload adds and updates files but does not delete old ones, so files that were renamed or removed stay on the server until someone deletes them there.
+
+## Open items
+
+- The "Reserve your spot" button in the Reserve section is a placeholder (marked with a TODO in `index.html`). It should link to the Webflow pre-order checkout.
+- The existing Webflow site is separate and is not changed by this repository.
