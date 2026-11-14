@@ -8,30 +8,33 @@
   <meta name="theme-color" content="#252b19">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23252b19'/%3E%3Ccircle cx='16' cy='16' r='8' fill='%23f2ae62'/%3E%3C/svg%3E">
   <link rel="preload" href="./assets/archivo.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./style.css?v=moon-i-13">
+  <!-- Bump ?v= on the CSS and JS links whenever those files change, so browsers fetch the new version. -->
+  <link rel="stylesheet" href="./style.css?v=14">
 </head>
 
 <body>
-  <a class="skip" href="#moon">Skip to product details</a>
+  <a class="skip" href="#product">Skip to product details</a>
 
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="Savitara home">Savitara</a>
     <nav aria-label="Main">
-      <a href="#moon">Savitr I</a>
+      <a href="#product">Savitr I</a>
       <a href="#gaffer">Gaffer Mode</a>
       <a class="nav-cta" href="#reserve">Reserve</a>
     </nav>
   </header>
 
   <main id="top">
-    <!-- Scroll brings the studio lights up; the slider sets their colour. -->
-    <section class="journey" aria-label="Savitr I, lit by two studio lights as you scroll">
-      <div class="stage">
+    <!-- Hero: scrolling brings the studio lights up and turns the 3D light (page.js);
+         the slider sets the light colour. The 3D view is drawn by light-scene.js. -->
+    <section class="hero" aria-label="Savitr I, lit by two studio lights as you scroll">
+      <div class="hero-frame">
         <div class="ambient" aria-hidden="true"></div>
 
-        <div class="sphere moon-scene" role="img" aria-label="Savitr I studio light seen from the rear three-quarter angle">
-          <img class="moon-poster" src="./assets/moon-i-rear-poster.webp" alt="" aria-hidden="true">
-          <canvas class="moon-canvas" aria-hidden="true"></canvas>
+        <div class="light-scene" role="img" aria-label="Savitr I studio light seen from the rear three-quarter angle">
+          <!-- Still image shown until the 3D model loads, or if it cannot. -->
+          <img class="light-poster" src="./assets/savitr-i-rear-poster.webp" alt="" aria-hidden="true">
+          <canvas class="light-canvas" aria-hidden="true"></canvas>
         </div>
 
         <div class="hero-copy">
@@ -61,12 +64,10 @@
             <p class="hint" id="hint">Scroll to bring the lights up. Drag the light to turn it, and the slider to change its color.</p>
           </div>
         </div>
-
-
       </div>
     </section>
 
-    <section class="features" id="moon" aria-labelledby="features-title">
+    <section class="features" id="product" aria-labelledby="features-title">
       <h2 id="features-title">One light that covers the whole shoot.</h2>
       <div class="feature-list">
         <article>
@@ -127,76 +128,7 @@
     <span>Omaha, Nebraska</span>
   </footer>
 
-  <script>
-    (() => {
-      'use strict';
-
-      const journey = document.querySelector('.journey');
-      const stage = document.querySelector('.stage');
-      const scene = document.querySelector('.moon-scene');
-      const slider = document.querySelector('#cct');
-      const cctValue = document.querySelector('#cct-value');
-      const caption = document.querySelector('#caption');
-      const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-
-      const clamp = v => Math.max(0, Math.min(1, v));
-      const smooth = (a, b, v) => { const t = clamp((v - a) / (b - a)); return t * t * (3 - 2 * t); };
-
-      // Blackbody approximation, shared with the 3D scene.
-      function kelvinRGB(k) {
-        const t = k / 100;
-        const r = t <= 66 ? 255 : 329.7 * Math.pow(t - 60, -.1332);
-        const g = t <= 66 ? 99.47 * Math.log(t) - 161.12 : 288.12 * Math.pow(t - 60, -.0755);
-        const b = t >= 66 ? 255 : t <= 19 ? 0 : 138.52 * Math.log(t - 10) - 305.04;
-        return [r, g, b].map(v => Math.round(Math.max(0, Math.min(255, v))));
-      }
-
-      let progress = -1, queued = false;
-      const captions = ['The lights are off.', 'Key light coming up.', 'Fill added. The shape is set.'];
-
-      function paint() {
-        const p = progress;
-        const kelvin = Number(slider.value);
-        const exposure = smooth(0, 1, p);
-        const key = .06 + .94 * exposure;
-        const fill = .20 + .25 * exposure;
-
-        const rgb = kelvinRGB(kelvin).join(' ');
-        const root = document.documentElement.style;
-        root.setProperty('--cct', rgb);
-        root.setProperty('--ambient', (.05 + exposure * .22).toFixed(4));
-        scene.style.setProperty('--moon-brightness', (.12 + .88 * exposure).toFixed(4));
-
-        window.savitaraLight = { progress: p, exposure, kelvin };
-        window.dispatchEvent(new CustomEvent('savitara:light', { detail: window.savitaraLight }));
-
-        for (const [id, v] of [['key', key], ['fill', fill]]) {
-          document.querySelector('#' + id + '-value').textContent = Math.round(v * 100) + '%';
-          document.querySelector('#' + id + '-bar').style.width = v * 100 + '%';
-        }
-        cctValue.textContent = kelvin + ' K';
-        const next = captions[p < .2 ? 0 : p < .7 ? 1 : 2];
-        if (caption.textContent !== next) caption.textContent = next;
-      }
-
-      function render() {
-        queued = false;
-        // The light scrolls with the page; lighting finishes after about 40% of a screen of scrolling.
-        const scrolled = Math.max(0, -journey.getBoundingClientRect().top);
-        const p = reduced.matches ? 1 : clamp(scrolled / (stage.offsetHeight * .4));
-        if (Math.abs(progress - p) > .0001) { progress = p; paint(); }
-      }
-      function request() { if (!queued) { queued = true; requestAnimationFrame(render); } }
-
-      document.addEventListener('scroll', request, { passive: true, capture: true });
-      addEventListener('resize', () => { progress = -1; request(); });
-      addEventListener('pageshow', () => { progress = -1; render(); });
-      slider.addEventListener('input', paint);
-      if (reduced.addEventListener) reduced.addEventListener('change', () => { progress = -1; render(); });
-
-      render();
-    })();
-  </script>
-  <script defer src="./moon-scene.js?v=moon-i-13"></script>
+  <script defer src="./page.js?v=14"></script>
+  <script defer src="./light-scene.js?v=14"></script>
 </body>
 </html>
