@@ -76,12 +76,7 @@ h1, h2, h3, p, ol { margin: 0; }
 /* Hero: sticky stage driven by scroll */
 /* The hero scrolls with the page; the light trails behind and the next section slides over it. */
 .journey { position: relative; background: var(--cyc); color: var(--ink); }
-.stage {
-  position: relative; height: 100svh; min-height: 640px; overflow: hidden;
-  /* Soft bottom edge that appears once scrolling starts, so the light dissolves rather than being cut. */
-  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--fade, 0%)), transparent);
-  mask-image: linear-gradient(to bottom, #000 calc(100% - var(--fade, 0%)), transparent);
-}
+.stage { position: relative; height: 100svh; min-height: 640px; overflow: hidden; }
 .moon-scene { will-change: transform; }
 .features { position: relative; z-index: 2; background: var(--paper); }
 .ambient {
