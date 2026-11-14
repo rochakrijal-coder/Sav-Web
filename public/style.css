@@ -1,33 +1,36 @@
-/* Savitara: studio charcoal, with light colour driven by the colour-temperature control. */
+/* Savitara website styles.
+   Sections, top to bottom: base, header, hero (3D light + controls), content sections, footer,
+   then tablet and phone adjustments. Colours and spacing are set once in :root below. */
+
 @font-face {
   font-family: "Archivo";
   src: url("./assets/archivo.woff2") format("woff2");
   font-weight: 100 900;
-  font-stretch: 62% 125%;
+  font-stretch: 62% 125%; /* variable width: 125% is the wide style used for headlines */
   font-display: swap;
 }
 
+/* ----- Base ----- */
+
 :root {
-  --cyc: #252b19;        /* Savitara olive, from the original site */
-  --cyc-raised: #2f3621; /* lifted olive for the Gaffer Mode panel */
-  --paper: #252b19;      /* content sections share the olive */
-  --paper-ink: #eeeade;
-  --paper-muted: #c9cdb5;
-  --paper-rule: #4a5236;
-  --ink: #eeeade;
-  --muted: #c9cdb5;
-  --rule: #4a5236;
-  --tungsten: #f2ae62;   /* 2700 K */
-  --daylight: #c3d8ee;   /* 6500 K */
-  --card: #e8e8dc;       /* original light stone section */
-  --card-ink: #15251e;
-  --cct: 255 210 160;    /* live colour of the lights, set by script */
-  --gutter: clamp(20px, 5vw, 72px);
+  --olive: #252b19;        /* main background, from the original Savitara site */
+  --olive-raised: #2f3621; /* Gaffer Mode panel */
+  --ink: #eeeade;          /* main text on olive */
+  --ink-soft: #d4d6c2;     /* larger supporting text on olive */
+  --muted: #c9cdb5;        /* small secondary text on olive */
+  --rule: #4a5236;         /* divider lines on olive */
+  --stone: #e8e8dc;        /* light background for the Reserve section and footer */
+  --stone-ink: #15251e;    /* text on stone */
+  --tungsten: #f2ae62;     /* 2700 K, warm end of the slider */
+  --daylight: #c3d8ee;     /* 6500 K, cool end of the slider */
+  --cct: 255 210 160;      /* live light colour as "r g b"; set by page.js */
+  --gutter: clamp(20px, 5vw, 72px); /* left and right page margin */
+
   font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
   font-size: 17px;
   line-height: 1.55;
   color: var(--ink);
-  background: var(--paper);
+  background: var(--olive);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -37,49 +40,38 @@ a { color: inherit; }
 h1, h2, h3, p, ol { margin: 0; }
 :focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
 
+/* Keyboard users can jump past the hero; the link appears only when focused. */
 .skip { position: absolute; left: -9999px; }
-.skip:focus { left: var(--gutter); top: 12px; z-index: 10; background: var(--ink); color: var(--cyc); padding: 8px 12px; }
+.skip:focus { left: var(--gutter); top: 12px; z-index: 10; background: var(--ink); color: var(--olive); padding: 8px 12px; }
+
+/* Hidden on screen, still read by screen readers. */
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 
-/* Header */
+/* ----- Header ----- */
+
 .site-header {
   position: fixed; inset: 0 0 auto; z-index: 5;
   display: flex; justify-content: space-between; align-items: center;
   padding: 22px var(--gutter);
-  background: rgb(37 43 25 / .78);
+  background: rgb(37 43 25 / .78); /* --olive, slightly see-through */
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
   backdrop-filter: blur(14px) saturate(1.2);
 }
-.wordmark {
-  text-decoration: none;
-  font-stretch: 125%;
-  font-weight: 640;
-  font-size: 19px;
-  letter-spacing: -.01em;
-}
+.wordmark { text-decoration: none; font-stretch: 125%; font-weight: 640; font-size: 19px; letter-spacing: -.01em; }
 .site-header nav { display: flex; gap: 28px; align-items: center; font-size: 15px; }
 .site-header nav a { text-decoration: none; color: var(--muted); transition: color .2s; }
 .site-header nav a:hover { color: var(--ink); }
-.site-header .nav-cta {
-  color: var(--cyc); background: var(--ink);
-  padding: 9px 16px; border-radius: 999px; font-weight: 560;
-}
-.site-header .nav-cta:hover { color: var(--cyc); background: rgb(var(--cct)); }
+.site-header .nav-cta { color: var(--olive); background: var(--ink); padding: 9px 16px; border-radius: 999px; font-weight: 560; }
+.site-header .nav-cta:hover { color: var(--olive); background: rgb(var(--cct)); }
 
-/* Past the hero, the header switches to the light page style. */
-.site-header { transition: background .25s, color .25s; }
-.site-header.on-light { background: rgb(244 245 246 / .82); color: var(--paper-ink); }
-.site-header.on-light nav a { color: var(--paper-muted); }
-.site-header.on-light nav a:hover { color: var(--paper-ink); }
-.site-header.on-light .nav-cta { background: var(--paper-ink); color: var(--paper); }
+/* ----- Hero: 3D light, product name and lighting controls -----
+   The hero scrolls with the page. It sits above the sections that follow (z-index),
+   so the 3D light is never covered and simply leaves through the top of the screen. */
 
-/* Hero: sticky stage driven by scroll */
-/* The hero scrolls with the page; the light trails behind and the next section slides over it. */
-.journey { position: relative; background: var(--cyc); color: var(--ink); }
-/* Nothing clips the light: it sits in front of the next section and leaves through the top of the screen. */
-.journey { z-index: 3; }
-.stage { position: relative; height: 100svh; min-height: 640px; }
-.features { position: relative; z-index: 2; background: var(--paper); }
+.hero { position: relative; z-index: 3; background: var(--olive); }
+.hero-frame { position: relative; height: 100svh; min-height: 640px; }
+
+/* Glow behind the light, tinted by the chosen colour and brightening with scroll (--ambient). */
 .ambient {
   position: absolute; inset: 0;
   background:
@@ -87,123 +79,114 @@ h1, h2, h3, p, ol { margin: 0; }
     radial-gradient(120% 60% at 50% 115%, #1c2113, transparent 60%);
   transition: background .3s;
 }
-.moon-scene {
+
+/* The 3D view. Shows the poster image until light-scene.js marks it data-ready="true". */
+.light-scene {
   position: absolute; right: -2%; top: 50%; transform: translateY(-50%);
   width: 62vw; max-width: 1040px; height: 88svh;
-  pointer-events: none; isolation: isolate;
+  pointer-events: none; /* only the canvas itself takes clicks and drags */
+  isolation: isolate;
 }
-.moon-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; pointer-events: auto; cursor: grab; }
-.moon-scene[data-dragging="true"] .moon-canvas { cursor: grabbing; }
-.moon-scene[data-ready="true"] .moon-canvas { opacity: 1; }
-.moon-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: brightness(var(--moon-brightness, .2)); }
-.moon-scene[data-ready="true"] .moon-poster { visibility: hidden; }
+.light-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; pointer-events: auto; cursor: grab; }
+.light-scene[data-dragging="true"] .light-canvas { cursor: grabbing; }
+.light-scene[data-ready="true"] .light-canvas { opacity: 1; }
+.light-poster {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+  filter: brightness(var(--light-brightness, .2)); /* poster brightens with scroll too */
+}
+.light-scene[data-ready="true"] .light-poster { visibility: hidden; }
 
+/* Left column: name, description, status line and controls. */
 .hero-copy { position: absolute; left: var(--gutter); top: 21%; width: min(44%, 560px); z-index: 2; }
 .product-name {
-  font-stretch: 125%;
-  font-weight: 260;
-  font-size: clamp(84px, 12.5vw, 200px);
-  line-height: .86;
-  letter-spacing: -.045em;
-  margin-left: -.05em;
+  font-stretch: 125%; font-weight: 260;
+  font-size: clamp(84px, 12.5vw, 200px); line-height: .86; letter-spacing: -.045em;
+  margin-left: -.05em; /* optical alignment with the text below */
 }
 .product-name .numeral { margin-left: .14em; font-weight: 420; }
-.lede { margin-top: 32px; max-width: 30ch; font-size: 19px; line-height: 1.5; color: #d4d6c2; }
-.status {
-  margin-top: 28px; font-size: 15px; color: var(--muted);
-  display: flex; align-items: center; gap: 10px;
-}
-.status::before {
+.lede { margin-top: 32px; max-width: 30ch; font-size: 19px; line-height: 1.5; color: var(--ink-soft); }
+.status { margin-top: 28px; font-size: 15px; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+.status::before { /* small dot in the current light colour */
   content: ""; width: 8px; height: 8px; border-radius: 50%;
   background: rgb(var(--cct)); box-shadow: 0 0 12px rgb(var(--cct) / .8);
 }
 
-/* Console: live readouts plus the colour-temperature control */
+/* Controls: Key and Fill readouts plus the colour-temperature slider. */
 .console {
   margin-top: 36px; max-width: 420px;
-  display: grid; grid-template-columns: 1fr; gap: 14px; align-items: center;
+  display: grid; gap: 14px;
   padding-top: 20px; border-top: 1px solid var(--rule);
 }
-.readout-label { min-width: 6.5em; }
 .readout { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; font-size: 14px; }
-.readout-label { color: var(--muted); }
-.readout-value { font-variant-numeric: tabular-nums; min-width: 5ch; text-align: right; }
+.readout-label { min-width: 6.5em; color: var(--muted); }
+.readout-value { min-width: 5ch; text-align: right; font-variant-numeric: tabular-nums; }
 .track { height: 3px; background: var(--rule); border-radius: 2px; overflow: hidden; }
-.track i { display: block; height: 100%; width: 0; background: rgb(var(--cct)); }
+.track i { display: block; height: 100%; width: 0; background: rgb(var(--cct)); } /* width set by page.js */
 .hint { margin-top: 4px; font-size: 13px; color: #b7b9ab; }
 
-.cct input {
-  -webkit-appearance: none; appearance: none; width: 100%; height: 24px; background: transparent; cursor: pointer; margin: 0;
-}
-.cct input::-webkit-slider-runnable-track {
-  height: 4px; border-radius: 2px;
-  background: linear-gradient(90deg, var(--tungsten), #fbe6c9 48%, var(--daylight));
-}
-.cct input::-moz-range-track {
-  height: 4px; border-radius: 2px;
-  background: linear-gradient(90deg, var(--tungsten), #fbe6c9 48%, var(--daylight));
-}
+/* Slider: track runs from tungsten to daylight; the thumb shows the current colour.
+   Browsers need separate -webkit- (Chrome, Safari) and -moz- (Firefox) rules. */
+.cct input { -webkit-appearance: none; appearance: none; width: 100%; height: 24px; margin: 0; background: transparent; cursor: pointer; }
+.cct input::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--tungsten), #fbe6c9 48%, var(--daylight)); }
+.cct input::-moz-range-track { height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--tungsten), #fbe6c9 48%, var(--daylight)); }
 .cct input::-webkit-slider-thumb {
   -webkit-appearance: none; width: 18px; height: 18px; margin-top: -7px; border-radius: 50%;
-  background: rgb(var(--cct)); border: 3px solid var(--cyc); box-shadow: 0 0 0 1px var(--ink);
+  background: rgb(var(--cct)); border: 3px solid var(--olive); box-shadow: 0 0 0 1px var(--ink);
 }
 .cct input::-moz-range-thumb {
   width: 14px; height: 14px; border-radius: 50%;
-  background: rgb(var(--cct)); border: 3px solid var(--cyc); box-shadow: 0 0 0 1px var(--ink);
+  background: rgb(var(--cct)); border: 3px solid var(--olive); box-shadow: 0 0 0 1px var(--ink);
 }
 .cct input:focus-visible { outline: none; }
 .cct input:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--ink); }
 
+/* ----- Content sections ----- */
 
-/* Content sections */
-section h2 {
-  font-stretch: 115%;
-  font-weight: 380;
-  font-size: clamp(36px, 4.6vw, 68px);
-  line-height: 1.02;
-  letter-spacing: -.03em;
-}
+section h2 { font-stretch: 115%; font-weight: 380; font-size: clamp(36px, 4.6vw, 68px); line-height: 1.02; letter-spacing: -.03em; }
 h3 { font-size: 19px; font-weight: 600; line-height: 1.3; letter-spacing: -.005em; }
 
-.features, .audience { color: var(--paper-ink); }
+/* What it does: three features in a row. */
 .features { padding: clamp(96px, 14vw, 180px) var(--gutter) clamp(80px, 10vw, 140px); }
 .features h2 { max-width: 15ch; }
 .feature-list { margin-top: clamp(56px, 7vw, 96px); display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
-.feature-list article { border-top: 1px solid var(--paper-rule); padding-top: 24px; }
-.feature-list p, .audience p { margin-top: 12px; color: var(--paper-muted); max-width: 36ch; }
-.steps p { margin-top: 12px; color: var(--muted); max-width: 36ch; }
+.feature-list article { border-top: 1px solid var(--rule); padding-top: 24px; }
+.feature-list p { margin-top: 12px; max-width: 36ch; color: var(--muted); }
 
+/* Gaffer Mode panel: intro on the left, numbered steps on the right. */
 .gaffer {
   margin: 0 var(--gutter); padding: clamp(56px, 7vw, 96px) clamp(28px, 5vw, 80px);
-  background: var(--cyc-raised); color: var(--ink); border-radius: 28px;
+  background: var(--olive-raised); border-radius: 28px;
   display: grid; grid-template-columns: 1fr 1.3fr; gap: 64px; align-items: start;
 }
-.gaffer-intro p:last-child { margin-top: 22px; max-width: 34ch; font-size: 19px; color: #d4d6c2; }
+.gaffer-intro p:last-child { margin-top: 22px; max-width: 34ch; font-size: 19px; color: var(--ink-soft); }
 .tag {
-  display: inline-block; margin-bottom: 22px; font-size: 14px; color: var(--daylight);
-  border: 1px solid rgb(195 216 238 / .45); border-radius: 999px; padding: 4px 12px;
+  display: inline-block; margin-bottom: 22px; padding: 4px 12px;
+  font-size: 14px; color: var(--daylight);
+  border: 1px solid rgb(195 216 238 / .45); border-radius: 999px;
 }
-.steps { list-style: none; padding: 0; counter-reset: step; display: grid; gap: 0; }
+.steps { list-style: none; padding: 0; counter-reset: step; }
 .steps li {
   counter-increment: step; display: grid; grid-template-columns: 56px 1fr; column-gap: 8px;
   padding: 26px 0; border-top: 1px solid var(--rule);
 }
 .steps li:first-child { border-top: 0; padding-top: 4px; }
-.steps li::before {
+.steps li::before { /* the step number */
   content: counter(step); grid-row: span 2;
   font-stretch: 125%; font-weight: 300; font-size: 34px; line-height: 1; color: var(--daylight);
 }
-.steps p { margin-top: 6px; }
+.steps p { margin-top: 6px; max-width: 36ch; color: var(--muted); }
 
+/* Who it's for: two columns. */
 .audience {
   padding: clamp(96px, 12vw, 160px) var(--gutter);
   display: grid; grid-template-columns: 1fr 1fr; gap: 48px clamp(48px, 8vw, 140px);
 }
 .audience h3 { font-stretch: 112%; font-weight: 420; font-size: clamp(24px, 2.4vw, 34px); letter-spacing: -.02em; }
-.audience p { font-size: 18px; max-width: 40ch; }
+.audience p { margin-top: 12px; max-width: 40ch; font-size: 18px; color: var(--muted); }
 
+/* Reserve (Founding 20): light stone section. */
 .reserve {
-  background: var(--card); color: var(--card-ink);
+  background: var(--stone); color: var(--stone-ink);
   padding: clamp(96px, 12vw, 160px) var(--gutter);
   display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px clamp(48px, 8vw, 120px); align-items: end;
 }
@@ -211,22 +194,24 @@ h3 { font-size: 19px; font-weight: 600; line-height: 1.3; letter-spacing: -.005e
 .reserve-body p { font-size: 18px; max-width: 42ch; color: #3e4a3c; }
 .reserve-body p + p { margin-top: 14px; }
 .button {
-  display: inline-block; margin-top: 32px; text-decoration: none;
-  background: var(--card-ink); color: var(--ink);
-  padding: 16px 28px; border-radius: 999px; font-weight: 560; font-size: 17px;
+  display: inline-block; margin-top: 32px; padding: 16px 28px; text-decoration: none;
+  background: var(--stone-ink); color: var(--ink);
+  border-radius: 999px; font-weight: 560; font-size: 17px;
   transition: background .2s, color .2s;
 }
-.button:hover { background: var(--tungsten); color: var(--card-ink); }
-.features .button { background: var(--paper-ink); }
-.button:focus-visible { outline-color: var(--card-ink); }
+.button:hover { background: var(--tungsten); color: var(--stone-ink); }
+.button:focus-visible { outline-color: var(--stone-ink); }
+
+/* ----- Footer ----- */
 
 .footer {
   display: flex; justify-content: space-between; gap: 20px;
   padding: 28px var(--gutter); font-size: 14px; color: #596456;
-  background: var(--card); border-top: 1px solid #bfc6b5;
+  background: var(--stone); border-top: 1px solid #bfc6b5;
 }
 
-/* Tablet */
+/* ----- Tablet ----- */
+
 @media (max-width: 960px) {
   .feature-list { grid-template-columns: 1fr; gap: 0; }
   .feature-list article { padding: 24px 0 32px; }
@@ -234,18 +219,19 @@ h3 { font-size: 19px; font-weight: 600; line-height: 1.3; letter-spacing: -.005e
   .gaffer { gap: 40px; }
 }
 
-/* Phone */
+/* ----- Phone: text and controls on top, the 3D light below them ----- */
+
 @media (max-width: 700px) {
   :root { font-size: 16px; }
   .site-header { padding: 16px var(--gutter); }
   .site-header nav { gap: 16px; font-size: 14px; }
   .site-header nav a:not(.nav-cta) { display: none; }
-  .stage { min-height: 760px; }
+  .hero-frame { min-height: 760px; }
   .hero-copy { top: 13%; width: auto; right: var(--gutter); }
   .product-name { font-size: clamp(72px, 22vw, 110px); }
   .lede { margin-top: 18px; font-size: 16px; }
   .status { margin-top: 14px; font-size: 14px; }
-  .moon-scene { width: 100%; right: 0; height: 36%; top: 78%; max-width: none; }
+  .light-scene { width: 100%; right: 0; height: 36%; top: 78%; max-width: none; }
   .console { margin-top: 18px; gap: 10px; padding-top: 14px; }
   .readout { font-size: 13px; gap: 10px; }
   .hint { display: none; }
