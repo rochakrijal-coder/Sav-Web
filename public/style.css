@@ -76,8 +76,9 @@ h1, h2, h3, p, ol { margin: 0; }
 /* Hero: sticky stage driven by scroll */
 /* The hero scrolls with the page; the light trails behind and the next section slides over it. */
 .journey { position: relative; background: var(--cyc); color: var(--ink); }
-.stage { position: relative; height: 100svh; min-height: 640px; overflow: hidden; }
-.moon-scene { will-change: transform; }
+/* Nothing clips the light: it sits in front of the next section and leaves through the top of the screen. */
+.journey { z-index: 3; }
+.stage { position: relative; height: 100svh; min-height: 640px; }
 .features { position: relative; z-index: 2; background: var(--paper); }
 .ambient {
   position: absolute; inset: 0;
